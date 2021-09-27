@@ -104,10 +104,10 @@ def alfonsoreyes_1():
                 # Calendario
                 dcc.DatePickerRange(
                     id = 'calendario',
-                    min_date_allowed = dt(2021, 7, 27),
-                    max_date_allowed = dt(2021, 8, 9),
-                    start_date = dt(2021, 7, 27),
-                    end_date = dt(2021, 8, 9),
+                    min_date_allowed = dt(2021, 8, 9),
+                    max_date_allowed = dt(2021, 9, 19),
+                    start_date = dt(2021, 8, 9),
+                    end_date = dt(2021, 9, 19),
                     first_day_of_week = 1,
                     minimum_nights = 0,
                     updatemode = 'bothdates',
@@ -203,16 +203,16 @@ def render_conteo(periodo, my_dropdown, my_dropdown_0, start_date, end_date):
     if my_dropdown_0 == 'conteo' and periodo == 'hora':
 
         # Leer csv
-        conteo_hora = pd.read_csv('assets/camaras_viales_hora.csv')
+        conteo_hora = pd.read_csv('assets/base_conteo_vel.csv')
 
         # Cambiar variables a string
         conteo_hora['hora'] = conteo_hora['hora'].astype(str)
-        conteo_hora['dia'] = conteo_hora['dia'].astype(str)
+        conteo_hora['fecha'] = conteo_hora['fecha'].astype(str)
 
         # Crear variable datetime
-        conteo_hora['datetime'] = conteo_hora['dia'] + ' ' + conteo_hora['hora']
+        conteo_hora['datetime'] = conteo_hora['fecha'] + '-' + conteo_hora['hora']
         conteo_hora['datetime'] = pd.to_datetime(conteo_hora['datetime'], 
-            dayfirst = True, format = '%d/%m/%Y %H')
+            yearfirst = True, format = '%Y-%m-%d-%H')
 
         # Duplicar columna de fecha y set index
         conteo_hora['datetime1'] = conteo_hora['datetime']
@@ -226,12 +226,12 @@ def render_conteo(periodo, my_dropdown, my_dropdown_0, start_date, end_date):
             template = 'plotly_white', hover_data = ['dia_semana'])
 
         conteo2.update_traces(mode = 'markers+lines', fill='tozeroy',
-            hovertemplate = '<b>%{y}</b><br>' +  conteo_hora['dia_semana'] + '<br>' + '%{x}')
+            hovertemplate = '<b>%{y}</b><br>' +  conteo_hora['dia_semana'])
         conteo2.update_xaxes(showgrid = False, showline = True,
             title_text = '')
         conteo2.update_yaxes(title_text = '')
         conteo2.update_layout(hoverlabel = dict(font_size = 16),
-            hoverlabel_align = 'right')
+            hoverlabel_align = 'right', hovermode = 'x unified')
 
         return conteo2
 
@@ -239,31 +239,51 @@ def render_conteo(periodo, my_dropdown, my_dropdown_0, start_date, end_date):
     elif my_dropdown_0 == 'conteo' and periodo == 'dia':
 
         # Leer csv
-        conteo_dia = pd.read_csv('assets/camaras_viales_dia.csv')
-        conteo_dia = conteo_dia.iloc[3:]
+        conteo_dia = pd.read_csv('assets/base_conteo_vel.csv')
+        #conteo_dia = conteo_dia.iloc[3:]
 
         # Cambiar variable a datetime
-        conteo_dia['dia'] = pd.to_datetime(conteo_dia['dia'],
+        conteo_dia['fecha'] = pd.to_datetime(conteo_dia['fecha'],
             dayfirst = True)
 
         # Duplicar columna de fecha y set index
-        conteo_dia['dia1'] = conteo_dia['dia']
-        conteo_dia = conteo_dia.set_index('dia')
+        conteo_dia['fecha1'] = conteo_dia['fecha']
+        conteo_dia = conteo_dia.set_index('fecha')
 
         # Filtro por calendario
-        conteo_dia = conteo_dia.loc[start_date:end_date]
+        #conteo_dia = conteo_dia.loc[start_date:end_date]
 
         # Graph
-        conteo2 = px.scatter(conteo_dia, x = 'dia1', y = my_dropdown,
-            template = 'plotly_white',
-            hover_data = ['dia_semana'])
+        #conteo2 = px.scatter(conteo_dia, x = 'fecha1', y = my_dropdown,
+        #    template = 'plotly_white',
+        #    hover_data = ['dia_semana'])
 
+        #conteo2.update_traces(mode = 'markers+lines', fill='tozeroy',
+        #    hovertemplate = '<b>%{y}</b><br>' +  conteo_dia['dia_semana'] + '<br>' + '%{x}')
+        #conteo2.update_xaxes(showgrid = False, showline = True, title_text = '')
+        #conteo2.update_layout(hoverlabel = dict(font_size = 16),
+        #    hoverlabel_align = 'right')
+        #conteo2.update_yaxes(title_text = '')
+
+        conteo_dia = conteo_dia.loc[start_date:end_date]
+        conteo_dia.reset_index()
+
+        conteo_dia = conteo_dia.drop(['mes', 'semana', 'dia_semana', 'hora'],
+         axis = 1)
+        conteo_dia = conteo_dia.loc[:, ~conteo_dia.columns.str.contains("avg")]
+        conteo_dia = conteo_dia.groupby('fecha1', as_index = False).sum()
+        conteo_dia['dia_semana'] = conteo_dia['fecha1'].dt.day_name()
+
+        conteo2 = px.line(conteo_dia, x = 'fecha1', y = my_dropdown,
+                    template = 'plotly_white', hover_data = ['dia_semana'])
+        
         conteo2.update_traces(mode = 'markers+lines', fill='tozeroy',
-            hovertemplate = '<b>%{y}</b><br>' +  conteo_dia['dia_semana'] + '<br>' + '%{x}')
-        conteo2.update_xaxes(showgrid = False, showline = True, title_text = '')
-        conteo2.update_layout(hoverlabel = dict(font_size = 16),
-            hoverlabel_align = 'right')
+            hovertemplate = '<b>%{y}</b><br>' +  conteo_dia['dia_semana'])
+        conteo2.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
         conteo2.update_yaxes(title_text = '')
+        conteo2.update_layout(hoverlabel = dict(font_size = 16),
+            hoverlabel_align = 'right', hovermode = 'x unified')
 
         return conteo2
 

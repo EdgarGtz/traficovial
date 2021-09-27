@@ -56,10 +56,11 @@ app.layout = html.Div([
 
 	dbc.NavbarSimple(
 		[
-			dbc.Button('Hechos Viales', href='/apps/hechosviales', color='light'),
+			dbc.Button('Hechos Viales', href='/apps/hechosviales', color='light', 
+                disabled = True),
 
 			dbc.Button('Alfonso Reyes', href = '/apps/alfonsoreyes', color = 'light',
-				disabled = True)
+				disabled = False)
 
 		],
 		brand='CGM',
@@ -118,7 +119,7 @@ def get_ayuda(tab):
     return render_alfonsoreyes(tab)
 
 
-#----------
+#-----------------------------------------------------------------------------
 
 # Hechos Viales
 
@@ -156,7 +157,7 @@ def get(clickData, start_date, end_date, hora, diasem):
 
 #-- Intersecciones - Lesionados
 
-@app.callback(Output('interseccion_les', 'children'), 
+@app.callback(Output('interseccion_les', 'children'),
 	[Input('mapa', 'clickData'),
 	Input('calendario', 'start_date'),
 	Input('calendario', 'end_date'),
