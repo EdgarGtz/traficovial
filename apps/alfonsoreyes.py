@@ -1,5 +1,6 @@
 import dash
 import dash_core_components as dcc
+from dash_core_components.Graph import Graph
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import plotly.express as px
@@ -587,6 +588,21 @@ def fichatecnica():
             dcc.Graph(
                 id = 'bici_hora',
                 figure = fig3
+            ),
+
+            dcc.Graph(
+                id = 'peatones_semana',
+                figure = fig4
+            ),
+
+            dcc.Graph(
+                id = 'peatones_dia',
+                figure = fig5
+            ),
+
+            dcc.Graph(
+                id = 'peatones_hora',
+                figure = fig6
             )
         ])
     ])
@@ -603,7 +619,9 @@ semana_alfonso = semana_alfonso.groupby('semana', as_index = False).sum()
 #Datos de conteo diarios
 dias_alfonso = ficha_alfonso.drop(['mes', 'semana', 'dia_semana', 'hora'], axis = 1)
 dias_alfonso = dias_alfonso.loc[:, ~dias_alfonso.columns.str.contains("avg")]
+dias_alfonso['fecha'] = pd.to_datetime(dias_alfonso['fecha'], dayfirst = True)
 dias_alfonso = dias_alfonso.groupby('fecha', as_index = False).sum()
+dias_alfonso['dia_semana'] = dias_alfonso['fecha'].dt.day_name()
 
 #Datos de conteo promedio por hora del día
 dias_promedio = ficha_alfonso.drop(['mes', 'semana', 'dia_semana', 'fecha'], axis = 1)
@@ -614,28 +632,87 @@ dias_promedio = dias_promedio.groupby('hora', as_index = False).mean()
 fig1 = px.line(semana_alfonso, x = 'semana', y = 'bicycle',
        labels = {'fecha': 'Fecha', 'bicycle': 'Bicicletas'},
        title = 'Conteo por Semana de Bicicletas',
-       template = 'plotly')
+       template = 'plotly_white')
 
-fig1.update_traces(mode="markers+lines", hovertemplate=None)
-fig1.update_layout(hovermode="x unified")
+fig1.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>')
+fig1.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig1.update_yaxes(title_text = '')
+fig1.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
 
 #Gráfica de conteo por día de bicicletas es fig2
 fig2 = px.line(dias_alfonso, x = 'fecha', y = 'bicycle',
        labels = {'fecha': 'Fecha', 'bicycle': 'Bicicletas'},
        title = 'Conteo de Bicicletas por Día',
-       template = 'plotly')
+       template = 'plotly_white',
+       hover_data = ['dia_semana'])
 
-fig2.update_traces(mode="markers+lines", hovertemplate=None)
-fig2.update_layout(hovermode="x unified")
+fig2.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>' +  dias_alfonso['dia_semana'])
+fig2.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig2.update_yaxes(title_text = '')
+fig2.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
 
 #Gráfica de conteo promedio por hora del día de bicicletas es fig3
 fig3 = px.line(dias_promedio, x = 'hora', y = 'bicycle',
        labels = {'fecha': 'Fecha', 'bicycle': 'Bicicletas'},
        title = 'Conteo Promedio por Hora de Bicicletas',
-       template = 'plotly')
+       template = 'plotly_white')
 
-fig3.update_traces(mode="markers+lines", hovertemplate=None)
-fig3.update_layout(hovermode="x unified")
+fig3.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>')
+fig3.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig3.update_yaxes(title_text = '')
+fig3.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
+
+#Gráfica de Conteo por Semana de Bicicletas es fig1
+fig4 = px.line(semana_alfonso, x = 'semana', y = 'peatones',
+       labels = {'fecha': 'Fecha', 'peatones': 'Peatones'},
+       title = 'Conteo por Semana de Peatones',
+       template = 'plotly_white')
+
+fig4.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>')
+fig4.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig4.update_yaxes(title_text = '')
+fig4.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
+
+#Gráfica de conteo por día de bicicletas es fig2
+fig5 = px.line(dias_alfonso, x = 'fecha', y = 'peatones',
+       labels = {'fecha': 'Fecha', 'peatones': 'Peatones'},
+       title = 'Conteo de Peatones por Día',
+       template = 'plotly_white',
+       hover_data = ['dia_semana'])
+
+fig5.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>' +  dias_alfonso['dia_semana'])
+fig5.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig5.update_yaxes(title_text = '')
+fig5.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
+
+#Gráfica de conteo promedio por hora del día de bicicletas es fig3
+fig6 = px.line(dias_promedio, x = 'hora', y = 'peatones',
+       labels = {'fecha': 'Fecha', 'bicycle': 'Peatones'},
+       title = 'Conteo Promedio por Hora de Peatones',
+       template = 'plotly_white')
+
+fig6.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>')
+fig6.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig6.update_yaxes(title_text = '')
+fig6.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
 
 #----------
 
