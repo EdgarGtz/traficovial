@@ -28,6 +28,9 @@ def alfonsoreyes():
                     dbc.CardHeader(
                         dbc.Tabs([
                             dbc.Tab(label='Conteo y Velocidad', tab_id='alfonsoreyes_1',
+                                disabled = False),
+                            
+                            dbc.Tab(label = 'Ficha Técnica', tab_id = 'fichatecnica',
                                 disabled = False)
                         ],
                         id='tabs',
@@ -104,9 +107,9 @@ def alfonsoreyes_1():
                 # Calendario
                 dcc.DatePickerRange(
                     id = 'calendario',
-                    min_date_allowed = dt(2021, 8, 9),
+                    min_date_allowed = dt(2021, 7, 25),
                     max_date_allowed = dt(2021, 9, 19),
-                    start_date = dt(2021, 8, 9),
+                    start_date = dt(2021, 7, 26),
                     end_date = dt(2021, 9, 19),
                     first_day_of_week = 1,
                     minimum_nights = 0,
@@ -185,7 +188,7 @@ def render_opciones(my_dropdown_0):
             {'label': 'Autobuses', 'value': 'avg_vel_bus'}
         ]
 
-#----------
+#-------------------------------
 
 # Visualizar gráficas de línea para conteo y velocidad
 def render_conteo(periodo, my_dropdown, my_dropdown_0, start_date, end_date):
@@ -210,9 +213,9 @@ def render_conteo(periodo, my_dropdown, my_dropdown_0, start_date, end_date):
         conteo_hora['fecha'] = conteo_hora['fecha'].astype(str)
 
         # Crear variable datetime
-        conteo_hora['datetime'] = conteo_hora['fecha'] + '-' + conteo_hora['hora']
+        conteo_hora['datetime'] = conteo_hora['fecha'] + '/' + conteo_hora['hora']
         conteo_hora['datetime'] = pd.to_datetime(conteo_hora['datetime'], 
-            yearfirst = True, format = '%Y-%m-%d-%H')
+            dayfirst = True, format = '%d/%m/%Y/%H')
 
         # Duplicar columna de fecha y set index
         conteo_hora['datetime1'] = conteo_hora['datetime']
@@ -220,6 +223,10 @@ def render_conteo(periodo, my_dropdown, my_dropdown_0, start_date, end_date):
 
         # Filtro por calendario
         conteo_hora = conteo_hora.loc[start_date:end_date]
+
+        conteopromedio_hora = conteo_hora
+        conteopromedio_hora['hora'] = conteopromedio_hora['hora'].astype(int)
+        conteopromedio_hora = conteopromedio_hora.groupby('hora', as_index = False).mean()
 
         # Graph
         conteo2 = px.scatter(conteo_hora, x = 'datetime1', y = my_dropdown,
@@ -232,6 +239,13 @@ def render_conteo(periodo, my_dropdown, my_dropdown_0, start_date, end_date):
         conteo2.update_yaxes(title_text = '')
         conteo2.update_layout(hoverlabel = dict(font_size = 16),
             hoverlabel_align = 'right', hovermode = 'x unified')
+
+        conteo3 = px.line(conteopromedio_hora, x = 'hora', y = my_dropdown,
+                        template = 'plotly_white',
+                        title = 'Conteo Promedio por Hora')
+        
+        conteo3.update_traces(mode="markers+lines", hovertemplate=None)
+        conteo3.update_layout(hovermode="x unified")
 
         return conteo2
 
@@ -382,9 +396,9 @@ def render_conteo(periodo, my_dropdown, my_dropdown_0, start_date, end_date):
         vel_hora['fecha'] = vel_hora['fecha'].astype(str)
 
         # Crear variable datetime
-        vel_hora['datetime'] = vel_hora['fecha'] + '-' + vel_hora['hora']
+        vel_hora['datetime'] = vel_hora['fecha'] + '/' + vel_hora['hora']
         vel_hora['datetime'] = pd.to_datetime(vel_hora['datetime'],
-            yearfirst = True, format = '%Y-%m-%d-%H')
+            dayfirst = True, format = '%d/%m/%Y/%H')
 
         # Duplicar columna de fecha y set index
         vel_hora['datetime1'] = vel_hora['datetime']
@@ -547,12 +561,90 @@ def render_conteo(periodo, my_dropdown, my_dropdown_0, start_date, end_date):
         return conteo2
 
 
+#-------------------------------
+
+# Layout Ficha Técnica
+def fichatecnica():
+
+    return html.Div(children = [
+        html.Div([
+            html.H1(children = 'Vía Libre'),
+
+            html.Div(children = '''
+                La información a continuación proviene de los datos reportados entre el 26 de julio y el 19 de septiembre en el cruce de Alfonso Reyes con Las Sendas.
+            '''),
+
+            dcc.Graph(
+                id = 'bici_semana',
+                figure = fig1
+            ),
+
+            dcc.Graph(
+                id = 'bici_dia',
+                figure = fig2
+            ),
+
+            dcc.Graph(
+                id = 'bici_hora',
+                figure = fig3
+            )
+        ])
+    ])
+
+ficha_alfonso = pd.read_csv('assets/base_conteo_vel.csv')
+
+#Datos de conteo semanales
+semana_alfonso = ficha_alfonso.drop(['mes', 'hora', 'dia_semana', 'fecha'], axis = 1)
+semana_alfonso = semana_alfonso.loc[:, ~semana_alfonso.columns.str.contains("avg")]
+semana_alfonso = semana_alfonso.groupby('semana', as_index = False).sum()
+
+#Datos de conteo por día de la semana
+
+#Datos de conteo diarios
+dias_alfonso = ficha_alfonso.drop(['mes', 'semana', 'dia_semana', 'hora'], axis = 1)
+dias_alfonso = dias_alfonso.loc[:, ~dias_alfonso.columns.str.contains("avg")]
+dias_alfonso = dias_alfonso.groupby('fecha', as_index = False).sum()
+
+#Datos de conteo promedio por hora del día
+dias_promedio = ficha_alfonso.drop(['mes', 'semana', 'dia_semana', 'fecha'], axis = 1)
+dias_promedio = dias_promedio.loc[:, ~dias_promedio.columns.str.contains("avg")]
+dias_promedio = dias_promedio.groupby('hora', as_index = False).mean()
+
+#Gráfica de Conteo por Semana de Bicicletas es fig1
+fig1 = px.line(semana_alfonso, x = 'semana', y = 'bicycle',
+       labels = {'fecha': 'Fecha', 'bicycle': 'Bicicletas'},
+       title = 'Conteo por Semana de Bicicletas',
+       template = 'plotly')
+
+fig1.update_traces(mode="markers+lines", hovertemplate=None)
+fig1.update_layout(hovermode="x unified")
+
+#Gráfica de conteo por día de bicicletas es fig2
+fig2 = px.line(dias_alfonso, x = 'fecha', y = 'bicycle',
+       labels = {'fecha': 'Fecha', 'bicycle': 'Bicicletas'},
+       title = 'Conteo de Bicicletas por Día',
+       template = 'plotly')
+
+fig2.update_traces(mode="markers+lines", hovertemplate=None)
+fig2.update_layout(hovermode="x unified")
+
+#Gráfica de conteo promedio por hora del día de bicicletas es fig3
+fig3 = px.line(dias_promedio, x = 'hora', y = 'bicycle',
+       labels = {'fecha': 'Fecha', 'bicycle': 'Bicicletas'},
+       title = 'Conteo Promedio por Hora de Bicicletas',
+       template = 'plotly')
+
+fig3.update_traces(mode="markers+lines", hovertemplate=None)
+fig3.update_layout(hovermode="x unified")
+
 #----------
 
 # Display tabs
 def render_alfonsoreyes(tab):
     if tab == 'alfonsoreyes_1':
         return alfonsoreyes_1()
+    elif tab == 'fichatecnica':
+        return fichatecnica()
 
 
 
