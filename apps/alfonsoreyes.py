@@ -37,6 +37,9 @@ def alfonsoreyes():
                                 disabled = False),
                             
                             dbc.Tab(label = 'Ficha Técnica - Velocidad', tab_id = 'fichatecnica_vel',
+                            disabled = False),
+
+                            dbc.Tab(label = 'Ficha Técnica - Reparto Modal', tab_id = 'fichatecnica_reparto',
                             disabled = False)
                         ],
                         id='tabs',
@@ -979,6 +982,47 @@ fig10.update_yaxes(title_text = '')
 fig10.update_layout(hoverlabel = dict(font_size = 16),
                  hoverlabel_align = 'right', hovermode = 'x unified')
 
+#------------------------------
+
+# Layout Reparto Modal
+
+def fichatecnica_reparto():
+    return html.Div([
+
+        dbc.Row([
+
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Reparto Modal (Entre Semana)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+                            id = 'velocidad_autos',
+                            #figure = 
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    )
+                ])
+            ])
+        ])
+    ])
+
+
+
+
 #----------
 
 # Display tabs
@@ -989,6 +1033,8 @@ def render_alfonsoreyes(tab):
         return fichatecnica_conteo()
     elif tab == 'fichatecnica_vel':
         return fichatecnica_vel()
+    elif tab == 'fichatecnica_reparto':
+        return fichatecnica_reparto()
 
 
 
