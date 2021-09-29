@@ -3,6 +3,7 @@ import dash_core_components as dcc
 from dash_core_components.Graph import Graph
 import dash_html_components as html
 import dash_bootstrap_components as dbc
+from dash_html_components.Br import Br
 import plotly.express as px
 import plotly.graph_objs as go
 import gspread
@@ -31,8 +32,11 @@ def alfonsoreyes():
                             dbc.Tab(label='Conteo y Velocidad', tab_id='alfonsoreyes_1',
                                 disabled = False),
                             
-                            dbc.Tab(label = 'Ficha Técnica', tab_id = 'fichatecnica',
-                                disabled = False)
+                            dbc.Tab(label = 'Ficha Técnica - Conteo', tab_id = 'fichatecnica_conteo',
+                                disabled = False),
+                            
+                            dbc.Tab(label = 'Ficha Técnica - Velocidad', tab_id = 'fichatecnica_vel',
+                            disabled = False)
                         ],
                         id='tabs',
                         active_tab="alfonsoreyes_1",
@@ -135,8 +139,6 @@ def alfonsoreyes_1():
                             dbc.Tab(label='Hora', tab_id='hora',
                                 disabled = False),
                             dbc.Tab(label = 'Día', tab_id = 'dia',
-                                disabled = False),
-                            dbc.Tab(label = 'Semana', tab_id = 'semana',
                                 disabled = False)
                         ],
                         id='periodo',
@@ -286,105 +288,6 @@ def render_conteo(periodo, my_dropdown, my_dropdown_0, start_date, end_date):
 
         return conteo2
 
-    # Conteo por semana - una semana o menos
-    elif my_dropdown_0 == 'conteo' and periodo == 'semana' and dif_tiempo < 7:
-
-        # Leer csv
-        conteo_semana = pd.read_csv('assets/camaras_viales_dia.csv')
-        conteo_semana = conteo_semana.iloc[3:]
-
-        # Cambiar variable a datetime
-        conteo_semana['dia'] = pd.to_datetime(conteo_semana['dia'],
-            dayfirst = True)
-
-        # Duplicar columna de fecha y set index
-        conteo_semana['dia1'] = conteo_semana['dia']
-        conteo_semana = conteo_semana.set_index('dia')
-
-        # Filtro por calendario
-        conteo_semana = conteo_semana.loc[start_date:end_date]
-
-        # Crear df nuevo con suma de selección
-        suma = conteo_semana[my_dropdown].sum()
-        suma = pd.Series(suma)
-        fecha = pd.Series(start_date)
-        conteo_semana = pd.DataFrame(dict(fecha = fecha, suma = suma))
-
-        # Graph
-        conteo2 = px.scatter(conteo_semana, x = 'fecha', y = 'suma',
-            template = 'plotly_white')
-
-        conteo2.update_traces(mode = 'markers+lines', fill='tozeroy',
-            hovertemplate = '<b>%{y}</b><br>' + '%{x}')
-        conteo2.update_xaxes(showgrid = False, showline = True, title_text = '')
-        conteo2.update_yaxes(title_text = '')
-        conteo2.update_layout(hoverlabel = dict(font_size =16),
-            hoverlabel_align = 'right')
-
-        return conteo2
-
-    # Conteo por semana - más de una semana
-    elif my_dropdown_0 == 'conteo' and periodo == 'semana':
-
-        # Leer csv
-        conteo_semana = pd.read_csv('assets/camaras_viales_dia.csv')
-        conteo_semana = conteo_semana.iloc[3:]
-
-        # Cambiar variable a datetime
-        conteo_semana['dia'] = pd.to_datetime(conteo_semana['dia'],
-            dayfirst = True)
-
-        # Duplicar columna de fecha y set index
-        conteo_semana['dia1'] = conteo_semana['dia']
-        conteo_semana = conteo_semana.set_index('dia')
-
-        # Filtro por calendario
-        conteo_semana = conteo_semana.loc[start_date:end_date]
-
-        # Variables de fecha para el while loop
-        dt_start_date = pd.to_datetime(start_date)
-        dt_end_date = pd.to_datetime(end_date)
-
-        # DF que se actualiza con el loop y termina graficado
-        conteo_semana_graph = pd.DataFrame(columns = ['fecha', 'suma'])
-
-        while dif_tiempo_loop >= 7:
-
-            # Filtra por la primera semana completa
-            conteo_semana_nuevo = conteo_semana.loc[
-                dt_start_date: dt_start_date + pd.DateOffset(days = 6)]
-
-            # Suma de variable y actualiza df a graficar
-            suma = conteo_semana_nuevo[my_dropdown].sum()
-            conteo_semana_graph = conteo_semana_graph.append(
-                {'fecha' : dt_start_date, 'suma' : suma}, ignore_index = True)
-
-            # Actualizar variables para el loop
-            dt_start_date = dt_start_date + pd.DateOffset(days = 7)
-            dif_tiempo_loop = dif_tiempo_loop - 7 
-
-        else:
-
-            # Filtra por los días restantes
-            conteo_semana_ultimo = conteo_semana.loc[dt_start_date: dt_end_date]
-    
-            # Suma de variable y actualiza df a graficar
-            suma = conteo_semana_ultimo[my_dropdown].sum()
-            conteo_semana_graph = conteo_semana_graph.append(
-                {'fecha' : dt_start_date, 'suma' : suma}, ignore_index = True)
-
-        # Graph
-        conteo2 = px.scatter(conteo_semana_graph, x = 'fecha', y = 'suma',
-            template = 'plotly_white')
-
-        conteo2.update_traces(mode = 'markers+lines', fill='tozeroy',
-            hovertemplate = '<b>%{y}</b><br>' + '%{x}')
-        conteo2.update_xaxes(showgrid = False, showline = True, title_text = '')
-        conteo2.update_yaxes(title_text = '')
-        conteo2.update_layout(hoverlabel = dict(font_size =16),
-            hoverlabel_align = 'right')
-
-        return conteo2
 
     # Velocidad por hora
     elif my_dropdown_0 == 'velocidad_promedio' and periodo == 'hora':
@@ -461,149 +364,355 @@ def render_conteo(periodo, my_dropdown, my_dropdown_0, start_date, end_date):
 
         return conteo2
 
-    # Velocidad por semana - una semana o menos
-    elif my_dropdown_0 == 'velocidad_promedio' and periodo == 'semana' and dif_tiempo < 7:
-
-        # Leer csv
-        vel_semana = pd.read_csv('assets/camaras_viales_dia.csv')
-        vel_semana = vel_semana.iloc[3:]
-
-        # Cambiar variable a datetime
-        vel_semana['dia'] = pd.to_datetime(vel_semana['dia'],
-            dayfirst = True)
-
-        # Duplicar columna de fecha y set index
-        vel_semana['dia1'] = vel_semana['dia']
-        vel_semana = vel_semana.set_index('dia')
-
-        # Filtro por calendario
-        vel_semana = vel_semana.loc[start_date:end_date]
-
-        # Crear df nuevo con suma de selección
-        mean = vel_semana[my_dropdown].mean()
-        mean = pd.Series(mean)
-        fecha = pd.Series(start_date)
-        vel_semana = pd.DataFrame(dict(fecha = fecha, mean = mean))
-
-        # Graph
-        conteo2 = px.scatter(vel_semana, x = 'fecha', y = 'mean', 
-            template = 'plotly_white')
-
-        conteo2.update_traces(mode = 'markers+lines',
-            fill='tozeroy', hovertemplate = '<b>%{y}</b><br>' + '%{x}')
-        conteo2.update_xaxes(showgrid = False, showline = True, title_text = '')
-        conteo2.update_yaxes(title_text = '')
-        conteo2.update_layout(hoverlabel = dict(font_size = 16),
-            hoverlabel_align = 'right')
-
-        return conteo2
-
-    # Velocidad por semana - más de una semana
-    elif my_dropdown_0 == 'velocidad_promedio' and periodo == 'semana':
-
-        # Leer csv
-        vel_semana = pd.read_csv('assets/camaras_viales_dia.csv')
-        vel_semana = vel_semana.iloc[3:]
-
-        # Cambiar variable a datetime
-        vel_semana['dia'] = pd.to_datetime(vel_semana['dia'],
-            dayfirst = True)
-
-        # Duplicar columna de fecha y set index
-        vel_semana['dia1'] = vel_semana['dia']
-        vel_semana = vel_semana.set_index('dia')
-
-        # Filtro por calendario
-        vel_semana = vel_semana.loc[start_date:end_date]
-
-        # Variables de fecha para el while loop
-        dt_start_date = pd.to_datetime(start_date)
-        dt_end_date = pd.to_datetime(end_date)
-
-        # DF que se actualiza con el loop y termina graficado
-        vel_semana_graph = pd.DataFrame(columns = ['fecha', 'suma'])
-
-        while dif_tiempo_loop >= 7:
-
-            # Filtra por la primera semana completa
-            vel_semana_nuevo = vel_semana.loc[
-                dt_start_date: dt_start_date + pd.DateOffset(days = 6)]
-
-            # Suma de variable y actualiza df a graficar
-            mean = vel_semana_nuevo[my_dropdown].mean()
-            vel_semana_graph = vel_semana_graph.append(
-                {'fecha' : dt_start_date, 'mean' : mean}, ignore_index = True)
-
-            # Actualizar variables para el loop
-            dt_start_date = dt_start_date + pd.DateOffset(days = 7)
-            dif_tiempo_loop = dif_tiempo_loop - 7 
-
-        else:
-
-            # Filtra por los días restantes
-            vel_semana_ultimo = vel_semana.loc[dt_start_date: dt_end_date]
-    
-            # Suma de variable y actualiza df a graficar
-            mean = vel_semana_ultimo[my_dropdown].mean()
-            vel_semana_graph = vel_semana_graph.append(
-                {'fecha' : dt_start_date, 'mean' : mean}, ignore_index = True)
-
-        # Graph
-        conteo2 = px.scatter(vel_semana_graph, x = 'fecha', y = 'mean',
-            template = 'plotly_white')
-
-        conteo2.update_traces(mode = 'markers+lines', fill='tozeroy',
-            hovertemplate = '<b>%{y}</b><br>' + '%{x}')
-        conteo2.update_xaxes(showgrid = False, showline = True, title_text = '')
-        conteo2.update_yaxes(title_text = '')
-        conteo2.update_layout(hoverlabel_align = 'right',
-            hoverlabel = dict(font_size =16))
-
-        return conteo2
-
 
 #-------------------------------
 
-# Layout Ficha Técnica
-def fichatecnica():
+# Layout Ficha Técnica - Conteo
+def fichatecnica_conteo():
+    return html.Div([
 
-    return html.Div(children = [
-        html.Div([
-            html.H1(children = 'Vía Libre'),
+        dbc.Row([
 
-            html.Div(children = '''
-                La información a continuación proviene de los datos reportados entre el 26 de julio y el 19 de septiembre en el cruce de Alfonso Reyes con Las Sendas.
-            '''),
+            dbc.Col([
 
-            dcc.Graph(
-                id = 'bici_semana',
-                figure = fig1
-            ),
+                dbc.Card([
 
-            dcc.Graph(
-                id = 'bici_dia',
-                figure = fig2
-            ),
+                    dbc.CardHeader(
+                        'Bicicletas por Semana (Entre Semana)'
+                    ),
 
-            dcc.Graph(
-                id = 'bici_hora',
-                figure = fig3
-            ),
+                    dbc.CardBody([
 
-            dcc.Graph(
-                id = 'peatones_semana',
-                figure = fig4
-            ),
+                        dcc.Graph(
+                            id = 'bici_semana',
+                            figure = fig1,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ]),
 
-            dcc.Graph(
-                id = 'peatones_dia',
-                figure = fig5
-            ),
+            dbc.Col([
+                dbc.Card([
 
-            dcc.Graph(
-                id = 'peatones_hora',
-                figure = fig6
-            )
+                    dbc.CardHeader(
+                        'Bicicletas por Día de la Semana (Entre Semana)'
+                    ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'bici_diasemana',
+                            #fig = 
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ])
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+            
+           dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Bicicletas por Día (Entre Semana)'
+                    ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'bici_dia',
+                            figure = fig2,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ]),
+
+            dbc.Col([
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Bicicletas por Hora (Entre Semana)'
+                    ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'bici_hora',
+                            figure = fig3,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ]) 
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Peatones por Semana (Entre Semana)'
+                    ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'peatones_semana',
+                            figure = fig4,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ]),
+
+            dbc.Col([
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Peatones por Día de la Semana (Entre Semana)'
+                    ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'peatones_diasemana',
+                            #figure = 
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ])
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Peatones por Día (Entre Semana)'
+                    ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'peatones_dia',
+                            figure = fig5,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ]),
+
+            dbc.Col([
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Peatones por Hora (Entre Semana)'
+                    ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'peatones_hora',
+                            figure = fig6,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ])
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Vehículos Motorizados por Semana (Entre Semana)'
+                    ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'motorizados_semana',
+                            figure = fig7,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ]),
+
+            dbc.Col([
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Vehículos Motorizados por Día de la Semana (Entre Semana)'
+                    ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'motorizados_diasemana',
+                            #figure = 
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ])
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Vehículos Motorizados por Día (Entre Semana)'
+                    ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'motorizados_dia',
+                            figure = fig8,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ]),
+
+            dbc.Col([
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Vehículos Motorizados por Hora (Entre Semana)'
+                    ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'motorizados_hora',
+                            figure = fig9,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ])
         ])
     ])
 
@@ -613,6 +722,7 @@ ficha_alfonso = pd.read_csv('assets/base_conteo_vel.csv')
 semana_alfonso = ficha_alfonso.drop(['mes', 'hora', 'dia_semana', 'fecha'], axis = 1)
 semana_alfonso = semana_alfonso.loc[:, ~semana_alfonso.columns.str.contains("avg")]
 semana_alfonso = semana_alfonso.groupby('semana', as_index = False).sum()
+semana_alfonso['motorizados'] = semana_alfonso['motorcycle'] + semana_alfonso['autos'] + semana_alfonso['bus']
 
 #Datos de conteo por día de la semana
 
@@ -622,16 +732,17 @@ dias_alfonso = dias_alfonso.loc[:, ~dias_alfonso.columns.str.contains("avg")]
 dias_alfonso['fecha'] = pd.to_datetime(dias_alfonso['fecha'], dayfirst = True)
 dias_alfonso = dias_alfonso.groupby('fecha', as_index = False).sum()
 dias_alfonso['dia_semana'] = dias_alfonso['fecha'].dt.day_name()
+dias_alfonso['motorizados'] = dias_alfonso['motorcycle'] + dias_alfonso['autos'] + dias_alfonso['bus']
 
 #Datos de conteo promedio por hora del día
 dias_promedio = ficha_alfonso.drop(['mes', 'semana', 'dia_semana', 'fecha'], axis = 1)
 dias_promedio = dias_promedio.loc[:, ~dias_promedio.columns.str.contains("avg")]
 dias_promedio = dias_promedio.groupby('hora', as_index = False).mean()
+dias_promedio['motorizados'] = dias_promedio['motorcycle'] + dias_promedio['autos'] + dias_promedio['bus']
 
 #Gráfica de Conteo por Semana de Bicicletas es fig1
 fig1 = px.line(semana_alfonso, x = 'semana', y = 'bicycle',
        labels = {'fecha': 'Fecha', 'bicycle': 'Bicicletas'},
-       title = 'Conteo por Semana de Bicicletas',
        template = 'plotly_white')
 
 fig1.update_traces(mode = 'markers+lines', fill='tozeroy',
@@ -645,7 +756,6 @@ fig1.update_layout(hoverlabel = dict(font_size = 16),
 #Gráfica de conteo por día de bicicletas es fig2
 fig2 = px.line(dias_alfonso, x = 'fecha', y = 'bicycle',
        labels = {'fecha': 'Fecha', 'bicycle': 'Bicicletas'},
-       title = 'Conteo de Bicicletas por Día',
        template = 'plotly_white',
        hover_data = ['dia_semana'])
 
@@ -660,7 +770,6 @@ fig2.update_layout(hoverlabel = dict(font_size = 16),
 #Gráfica de conteo promedio por hora del día de bicicletas es fig3
 fig3 = px.line(dias_promedio, x = 'hora', y = 'bicycle',
        labels = {'fecha': 'Fecha', 'bicycle': 'Bicicletas'},
-       title = 'Conteo Promedio por Hora de Bicicletas',
        template = 'plotly_white')
 
 fig3.update_traces(mode = 'markers+lines', fill='tozeroy',
@@ -671,10 +780,9 @@ fig3.update_yaxes(title_text = '')
 fig3.update_layout(hoverlabel = dict(font_size = 16),
                  hoverlabel_align = 'right', hovermode = 'x unified')
 
-#Gráfica de Conteo por Semana de Bicicletas es fig1
+#Gráfica de Conteo por Semana de Peatones es fig4
 fig4 = px.line(semana_alfonso, x = 'semana', y = 'peatones',
        labels = {'fecha': 'Fecha', 'peatones': 'Peatones'},
-       title = 'Conteo por Semana de Peatones',
        template = 'plotly_white')
 
 fig4.update_traces(mode = 'markers+lines', fill='tozeroy',
@@ -685,10 +793,9 @@ fig4.update_yaxes(title_text = '')
 fig4.update_layout(hoverlabel = dict(font_size = 16),
                  hoverlabel_align = 'right', hovermode = 'x unified')
 
-#Gráfica de conteo por día de bicicletas es fig2
+#Gráfica de conteo por día de peatones es fig5
 fig5 = px.line(dias_alfonso, x = 'fecha', y = 'peatones',
        labels = {'fecha': 'Fecha', 'peatones': 'Peatones'},
-       title = 'Conteo de Peatones por Día',
        template = 'plotly_white',
        hover_data = ['dia_semana'])
 
@@ -700,10 +807,9 @@ fig5.update_yaxes(title_text = '')
 fig5.update_layout(hoverlabel = dict(font_size = 16),
                  hoverlabel_align = 'right', hovermode = 'x unified')
 
-#Gráfica de conteo promedio por hora del día de bicicletas es fig3
+#Gráfica de conteo promedio por hora del día de peatones es fig6
 fig6 = px.line(dias_promedio, x = 'hora', y = 'peatones',
        labels = {'fecha': 'Fecha', 'bicycle': 'Peatones'},
-       title = 'Conteo Promedio por Hora de Peatones',
        template = 'plotly_white')
 
 fig6.update_traces(mode = 'markers+lines', fill='tozeroy',
@@ -714,14 +820,127 @@ fig6.update_yaxes(title_text = '')
 fig6.update_layout(hoverlabel = dict(font_size = 16),
                  hoverlabel_align = 'right', hovermode = 'x unified')
 
+#Gráfica de Conteo por Semana de Motorizados es fig7
+fig7 = px.line(semana_alfonso, x = 'semana', y = 'motorizados',
+       labels = {'fecha': 'Fecha', 'motorizados': 'Vehículos Motorizados'},
+       template = 'plotly_white')
+
+fig7.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>')
+fig7.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig7.update_yaxes(title_text = '')
+fig7.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
+
+#Gráfica de conteo por día de motorizados es fig8
+fig8 = px.line(dias_alfonso, x = 'fecha', y = 'motorizados',
+       labels = {'fecha': 'Fecha', 'motorizados': 'Vehículos Motorizados'},
+       template = 'plotly_white',
+       hover_data = ['dia_semana'])
+
+fig8.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>' +  dias_alfonso['dia_semana'])
+fig8.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig8.update_yaxes(title_text = '')
+fig8.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
+
+#Gráfica de conteo promedio por hora del día de motorizados es fig9
+fig9 = px.line(dias_promedio, x = 'hora', y = 'motorizados',
+       labels = {'fecha': 'Fecha', 'motorizados': 'Vehículos Motorizados'},
+       template = 'plotly_white')
+
+fig9.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>')
+fig9.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig9.update_yaxes(title_text = '')
+fig9.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
+
+
+#-----------------------------------
+
+# Layout Ficha Técnica - Velocidad
+def fichatecnica_vel():
+    return html.Div([
+
+        dbc.Row([
+
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Velocidad - Auto Particular (Entre Semana)'
+                    ),
+
+                    dbc.CardBody(
+                        'La velocidad promedio diaria es de 67 km/h.'
+                    )
+                ])
+            ]),
+
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Velocidad Promedio de Autos Particulares por Hora (Entre Semana)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+                            id = 'velocidad_autos',
+                            figure = fig10,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    )
+                ])
+            ])
+        ])
+    ])
+
+
+vel_alfonso = ficha_alfonso.drop(['fecha', 'mes', 'semana', 'dia_semana',
+                                   'child', 'hombre', 'mujer', 'peatones',
+                                   'bicycle', 'motorcycle', 'autos', 'pickup',
+                                    'van', 'truck', 'autos', 'bus'], axis = 1)
+vel_alfonso = vel_alfonso.groupby('hora', as_index = False).mean()
+
+fig10 = px.line(vel_alfonso, x = 'hora', y = 'avg_vel_car',
+       labels = {'avg_vel_car': 'Velocidad Promedio (km/h)', 'hora': 'Hora'},
+       template = 'plotly_white')
+
+fig10.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>')
+fig10.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig10.update_yaxes(title_text = '')
+fig10.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
+
 #----------
 
 # Display tabs
 def render_alfonsoreyes(tab):
     if tab == 'alfonsoreyes_1':
         return alfonsoreyes_1()
-    elif tab == 'fichatecnica':
-        return fichatecnica()
+    elif tab == 'fichatecnica_conteo':
+        return fichatecnica_conteo()
+    elif tab == 'fichatecnica_vel':
+        return fichatecnica_vel()
 
 
 
