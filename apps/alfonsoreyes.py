@@ -1,3 +1,4 @@
+from re import template
 import dash
 import dash_core_components as dcc
 from dash_core_components.Graph import Graph
@@ -411,7 +412,7 @@ def fichatecnica_conteo():
 
                         dcc.Graph(
                             id = 'bici_diasemana',
-                            #fig = 
+                            figure = fig11,
                             config = {
                                 'modeBarButtonsToRemove':
                                 ['zoom2d', 'lasso2d', 'pan2d',
@@ -527,7 +528,7 @@ def fichatecnica_conteo():
 
                         dcc.Graph(
                             id = 'peatones_diasemana',
-                            #figure = 
+                            figure = fig12,
                             config = {
                                 'modeBarButtonsToRemove':
                                 ['zoom2d', 'lasso2d', 'pan2d',
@@ -642,7 +643,7 @@ def fichatecnica_conteo():
 
                         dcc.Graph(
                             id = 'motorizados_diasemana',
-                            #figure = 
+                            figure = fig13,
                             config = {
                                 'modeBarButtonsToRemove':
                                 ['zoom2d', 'lasso2d', 'pan2d',
@@ -727,6 +728,16 @@ semana_alfonso = semana_alfonso.groupby('semana', as_index = False).sum()
 semana_alfonso['motorizados'] = semana_alfonso['motorcycle'] + semana_alfonso['autos'] + semana_alfonso['bus']
 
 #Datos de conteo por día de la semana
+
+diasemana_alfonso = ficha_alfonso.drop(['mes', 'semana', 'dia_semana', 'hora'], axis = 1)
+diasemana_alfonso = diasemana_alfonso.loc[:, ~diasemana_alfonso.columns.str.contains("avg")]
+diasemana_alfonso['fecha'] = pd.to_datetime(diasemana_alfonso['fecha'], dayfirst = True)
+diasemana_alfonso = diasemana_alfonso.groupby('fecha', as_index = False).sum()
+diasemana_alfonso['dia_semana'] = diasemana_alfonso['fecha'].dt.day_name()
+diasemana_alfonso = diasemana_alfonso.drop('fecha', axis = 1)
+diasemana_alfonso['dia_semana'] = diasemana_alfonso['dia_semana'].astype(str)
+diasemana_alfonso = diasemana_alfonso.groupby('dia_semana', as_index = False, sort = False).mean()
+diasemana_alfonso['motorizados'] = diasemana_alfonso['motorcycle'] + diasemana_alfonso['autos'] + diasemana_alfonso['bus']
 
 #Datos de conteo diarios
 dias_alfonso = ficha_alfonso.drop(['mes', 'semana', 'dia_semana', 'hora'], axis = 1)
@@ -862,6 +873,41 @@ fig9.update_yaxes(title_text = '')
 fig9.update_layout(hoverlabel = dict(font_size = 16),
                  hoverlabel_align = 'right', hovermode = 'x unified')
 
+fig11 = px.line(diasemana_alfonso, x = 'dia_semana', y = 'bicycle',
+                labels = {'dia_semana': 'Día de la Semana', 'bicycle': 'Bicicletas'},
+                template = 'plotly_white')
+
+fig11.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>')
+fig11.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig11.update_yaxes(title_text = '')
+fig11.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
+
+fig12 = px.line(diasemana_alfonso, x = 'dia_semana', y = 'peatones',
+                labels = {'dia_semana': 'Día de la Semana', 'peatones': 'Peatones'},
+                template = 'plotly_white')
+
+fig12.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>')
+fig12.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig12.update_yaxes(title_text = '')
+fig12.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
+
+fig13 = px.line(diasemana_alfonso, x = 'dia_semana', y = 'motorizados',
+                labels = {'dia_semana': 'Día de la Semana', 'motorizados': 'Vehículos Motorizados'},
+                template = 'plotly_white')
+
+fig13.update_traces(mode = 'markers+lines', fill='tozeroy',
+            hovertemplate = '<b>%{y}</b><br>')
+fig13.update_xaxes(showgrid = False, showline = True,
+            title_text = '')
+fig13.update_yaxes(title_text = '')
+fig13.update_layout(hoverlabel = dict(font_size = 16),
+                 hoverlabel_align = 'right', hovermode = 'x unified')
 
 #-----------------------------------
 
