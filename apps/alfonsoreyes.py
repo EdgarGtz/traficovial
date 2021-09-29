@@ -717,6 +717,8 @@ def fichatecnica_conteo():
     ])
 
 ficha_alfonso = pd.read_csv('assets/base_conteo_vel.csv')
+ficha_alfonso = ficha_alfonso[ficha_alfonso['dia_semana'] != 'sábado']
+ficha_alfonso = ficha_alfonso[ficha_alfonso['dia_semana'] != 'domingo']
 
 #Datos de conteo semanales
 semana_alfonso = ficha_alfonso.drop(['mes', 'hora', 'dia_semana', 'fecha'], axis = 1)
