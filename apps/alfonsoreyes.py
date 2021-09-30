@@ -1036,9 +1036,8 @@ fig10.update_layout(hoverlabel = dict(font_size = 16),
                  hoverlabel_align = 'right', hovermode = 'x unified')
 
 indic = go.Figure(go.Indicator(
-    mode = "number+delta",
+    mode = "number",
     value = 67,
-    delta = {'position': "bottom", 'reference': 67,'decreasing':dict(color="green"),'increasing':dict(color="red")},
     domain = {'x': [0, 1], 'y': [0, 1]},
     title = {"text": "Velocidad Promedio<br><span style='font-size:0.8em;color:gray'>"}
 ))
@@ -1119,10 +1118,16 @@ mes_alfonso = ficha_alfonso.drop(['semana', 'fecha', 'dia_semana', 'hora', 'chil
 mes_alfonso = mes_alfonso.loc[:, ~mes_alfonso.columns.str.contains("avg")]
 mes_alfonso = mes_alfonso.groupby('mes', as_index = False, sort = False).sum()
 
-peatones = [sum(mes_alfonso['peatones'])]
-bici = [sum(mes_alfonso['bicycle'])]
-moto = [sum(mes_alfonso['motorcycle'])]
-autos = [sum(mes_alfonso['autos'])]
+peatones = sum(mes_alfonso['peatones'])
+bici = sum(mes_alfonso['bicycle'])
+moto = sum(mes_alfonso['motorcycle'])
+autos = sum(mes_alfonso['autos'])
+total = peatones + bici + moto + autos
+
+peatones = [peatones / total]
+bici = [bici / total]
+moto = [moto / total]
+autos = [autos / total]
 
 reparto_modal = pd.DataFrame()
 reparto_modal['peatones'] = peatones
