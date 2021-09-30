@@ -1148,12 +1148,11 @@ mes_peatones = ficha_alfonso.drop(['semana', 'fecha', 'dia_semana', 'hora', 'chi
 mes_peatones = mes_peatones.loc[:, ~mes_peatones.columns.str.contains("avg")]
 mes_peatones = mes_peatones.groupby('mes', as_index = False, sort = False).sum()
 
-hombre_peatones = [sum(mes_peatones['hombre'])]
-mujer_peatones = [sum(mes_peatones['mujer'])]
+genero = [sum(mes_peatones['hombre']), sum(mes_peatones['mujer'])]
 
 genero_peatones = pd.DataFrame()
 genero_peatones['genero'] = ['hombre', 'mujer']
-genero_peatones['cuenta'] = [hombre_peatones, mujer_peatones]
+genero_peatones['cuenta'] = genero
 
 pie_peatones = px.pie(genero_peatones, values = 'cuenta', names = 'genero')
 
