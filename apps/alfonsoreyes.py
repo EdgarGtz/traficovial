@@ -30,20 +30,21 @@ def alfonsoreyes():
                 dbc.Card([
                     dbc.CardHeader(
                         dbc.Tabs([
-                            dbc.Tab(label='Conteo y Velocidad', tab_id='alfonsoreyes_1',
+                            
+                            dbc.Tab(label = 'Conteo', tab_id = 'fichatecnica_conteo',
                                 disabled = False),
                             
-                            dbc.Tab(label = 'Ficha Técnica - Conteo', tab_id = 'fichatecnica_conteo',
-                                disabled = False),
-                            
-                            dbc.Tab(label = 'Ficha Técnica - Velocidad', tab_id = 'fichatecnica_vel',
+                            dbc.Tab(label = 'Velocidad', tab_id = 'fichatecnica_vel',
                             disabled = False),
 
-                            dbc.Tab(label = 'Ficha Técnica - Reparto Modal', tab_id = 'fichatecnica_reparto',
-                            disabled = False)
+                            dbc.Tab(label = 'Reparto Modal', tab_id = 'fichatecnica_reparto',
+                            disabled = False),
+
+                            dbc.Tab(label='Conteo y Velocidad', tab_id='alfonsoreyes_1',
+                                disabled = True)
                         ],
                         id='tabs',
-                        active_tab="alfonsoreyes_1",
+                        active_tab="fichatecnica_conteo",
                         card=True
                         )
                     ),
@@ -693,6 +694,7 @@ def fichatecnica_conteo():
             ]),
 
             dbc.Col([
+
                 dbc.Card([
 
                     dbc.CardHeader(
@@ -714,6 +716,25 @@ def fichatecnica_conteo():
                                 'displaylogo': False
                             }
                         )
+                    ])
+                ])
+            ])
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Información Adicional'
+                    ),
+
+                    dbc.CardBody([
+                        'La información proviene de los datos reportados entre el 26 de julio y el 19 de septiembre en el cruce de Alfonso Reyes y Las Sendas.'
                     ])
                 ])
             ])
@@ -929,7 +950,20 @@ def fichatecnica_vel():
                     ),
 
                     dbc.CardBody(
-                        'La velocidad promedio diaria es de 67 km/h.'
+
+                        dcc.Graph(
+
+                            id = 'indic_velocidad',
+                            figure = indic,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False}
+                        )
                     )
                 ])
             ]),
@@ -960,6 +994,25 @@ def fichatecnica_vel():
                     )
                 ])
             ])
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Información Adicional'
+                    ),
+
+                    dbc.CardBody([
+                        'La información proviene de los datos reportados entre el 26 de julio y el 19 de septiembre en el cruce de Alfonso Reyes y Las Sendas.'
+                    ])
+                ])
+            ])
         ])
     ])
 
@@ -982,6 +1035,20 @@ fig10.update_yaxes(title_text = '')
 fig10.update_layout(hoverlabel = dict(font_size = 16),
                  hoverlabel_align = 'right', hovermode = 'x unified')
 
+indic = go.Figure(go.Indicator(
+    mode = "number+delta",
+    value = 67,
+    delta = {'position': "bottom", 'reference': 67,'decreasing':dict(color="green"),'increasing':dict(color="red")},
+    domain = {'x': [0, 1], 'y': [0, 1]},
+    title = {"text": "Velocidad Promedio<br><span style='font-size:0.8em;color:gray'>"}
+))
+indic.update_layout(
+     margin = dict(t=0, l=0, r=0, b=0))
+
+indic.update_traces(
+    number_suffix='km/h', 
+    selector=dict(type='indicator'))
+
 #------------------------------
 
 # Layout Reparto Modal
@@ -1002,8 +1069,35 @@ def fichatecnica_reparto():
                     dbc.CardBody(
 
                         dcc.Graph(
-                            id = 'velocidad_autos',
-                            #figure = 
+                            id = 'reparto_modal',
+                            figure = bar_reparto,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    )
+                ])
+            ]),
+
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Género de Peatones (Entre Semana)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+                            id = 'gender_peatones',
+                            figure = pie_peatones,
                             config = {
                                 'modeBarButtonsToRemove':
                                 ['zoom2d', 'lasso2d', 'pan2d',
@@ -1020,8 +1114,48 @@ def fichatecnica_reparto():
         ])
     ])
 
+mes_alfonso = ficha_alfonso.drop(['semana', 'fecha', 'dia_semana', 'hora', 'child', 'mujer', 'hombre', 
+                      'car', 'pickup', 'van', 'truck', 'bus'], axis = 1)
+mes_alfonso = mes_alfonso.loc[:, ~mes_alfonso.columns.str.contains("avg")]
+mes_alfonso = mes_alfonso.groupby('mes', as_index = False, sort = False).sum()
 
+peatones = [sum(mes_alfonso['peatones'])]
+bici = [sum(mes_alfonso['bicycle'])]
+moto = [sum(mes_alfonso['motorcycle'])]
+autos = [sum(mes_alfonso['autos'])]
 
+reparto_modal = pd.DataFrame()
+reparto_modal['peatones'] = peatones
+reparto_modal['bicicletas'] = bici
+reparto_modal['motocicletas'] = moto
+reparto_modal['autos'] = autos
+
+bar_reparto = px.bar(reparto_modal.T, template = 'plotly_white')
+
+bar_reparto.update_layout(xaxis={'categoryorder':'total descending'},
+                          showlegend = False)
+
+bar_reparto.update_traces(hovertemplate = '<b>%{y}</b><br>')
+
+bar_reparto.update_xaxes(showgrid = False,
+                         showline = True, 
+                         title_text = '')
+
+bar_reparto.update_yaxes(title_text = '')
+
+mes_peatones = ficha_alfonso.drop(['semana', 'fecha', 'dia_semana', 'hora', 'child', 
+                      'car', 'pickup', 'van', 'truck', 'bus'], axis = 1)
+mes_peatones = mes_peatones.loc[:, ~mes_peatones.columns.str.contains("avg")]
+mes_peatones = mes_peatones.groupby('mes', as_index = False, sort = False).sum()
+
+hombre_peatones = [sum(mes_peatones['hombre'])]
+mujer_peatones = [sum(mes_peatones['mujer'])]
+
+genero_peatones = pd.DataFrame()
+genero_peatones['genero'] = ['hombre', 'mujer']
+genero_peatones['cuenta'] = [hombre_peatones, mujer_peatones]
+
+pie_peatones = px.pie(genero_peatones, values = 'cuenta', names = 'genero')
 
 #----------
 
