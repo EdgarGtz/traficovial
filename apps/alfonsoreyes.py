@@ -1135,18 +1135,35 @@ reparto_modal['bicicletas'] = bici
 reparto_modal['motocicletas'] = moto
 reparto_modal['autos'] = autos
 
+reparto_modal['peatones'] = reparto_modal['peatones'] * 100
+reparto_modal['bicicletas'] = reparto_modal['bicicletas'] * 100
+reparto_modal['motocicletas'] = reparto_modal['motocicletas'] * 100
+reparto_modal['autos'] = reparto_modal['autos'] * 100
+
+reparto_modal['peatones'] = reparto_modal['peatones'].round(2)
+reparto_modal['bicicletas'] = reparto_modal['bicicletas'].round(2)
+reparto_modal['motocicletas'] = reparto_modal['motocicletas'].round(2)
+reparto_modal['autos'] = reparto_modal['autos'].round(2)
+
 bar_reparto = px.bar(reparto_modal.T, template = 'plotly_white')
 
 bar_reparto.update_layout(xaxis={'categoryorder':'total descending'},
-                          showlegend = False)
-
-bar_reparto.update_traces(hovertemplate = '<b>%{y}</b><br>')
+                          showlegend = False,
+                          uniformtext_minsize = 8,
+                          uniformtext_mode = 'hide')
 
 bar_reparto.update_xaxes(showgrid = False,
                          showline = True, 
                          title_text = '')
 
 bar_reparto.update_yaxes(title_text = '')
+
+bar_reparto.update_traces(texttemplate='<b>%{y}</b>%',
+                          textposition='outside',
+                          hovertemplate = None,
+                          hoverinfo = 'skip')
+
+#----------------
 
 mes_peatones = ficha_alfonso.drop(['semana', 'fecha', 'dia_semana', 'hora', 'child', 
                       'car', 'pickup', 'van', 'truck', 'bus'], axis = 1)
