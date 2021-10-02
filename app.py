@@ -57,7 +57,7 @@ app.layout = html.Div([
 	dbc.NavbarSimple(
 		[
 
-			dbc.Button('Alfonso Reyes', href = '/apps/alfonsoreyes', color = 'light',
+			dbc.Button('Vía Libre', href = '/apps/alfonsoreyes', color = 'light',
 				disabled = False)
 
 		],
