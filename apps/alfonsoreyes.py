@@ -51,6 +51,11 @@ def alfonsoreyes():
                             dbc.Tab(label = 'Reparto Modal',
                                     tab_id = 'fichatecnica_reparto',
                                     disabled = False),
+
+                            # Hechos Viales
+                            dbc.Tab(label = 'Hechos Viales',
+                                    tab_id = 'fichatecnica_hv',
+                                    disabled = False),
                             
                             # Gráficas Pre-JL
                             dbc.Tab(label = 'Conteo y Velocidad',
@@ -99,6 +104,8 @@ def render_alfonsoreyes(tab):
         return fichatecnica_vel()
     elif tab == 'fichatecnica_reparto':
         return fichatecnica_reparto()
+    elif tab == 'fichatecnica_hv':
+        return fichatecnica_hv()
     elif tab == 'alfonsoreyes_1':
         return alfonsoreyes_1()
 
@@ -1215,6 +1222,438 @@ genero_peatones['cuenta'] = genero
 
 # Gráfica de Género de Peatones
 pie_peatones = px.pie(genero_peatones, values = 'cuenta', names = 'genero')
+
+#----------------------------------------------------------
+
+## Layout Ficha Técnica - Hechos Viales
+
+def fichatecnica_hv():
+    return html.Div([
+
+        # Indicadores
+        dbc.Row([
+
+            # Hechos Viales
+            dbc.Col([
+
+                dbc.Card([
+                    
+                    dbc.CardHeader(
+                        'Hechos Viales (2015 - 2020)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+
+                            id = 'prom_hv',
+                            figure = prom_hv,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False}
+                        )
+                    )
+                ])
+            ]),
+
+            # Lesionados
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Lesionados (2015 - 2020)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+
+                            id = 'prom_lesionados',
+                            figure = prom_lesionados,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False}
+                        )
+                    )
+                ])
+            ]),
+
+            # Fallecidos
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Fallecidos (2015 - 2020)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+
+                            id = 'prom_fallecidos',
+                            figure = prom_fallecidos,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False}
+                        )
+                    )
+                ])
+            ]),
+
+            # Atropellos a Peatones
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Atropellos a Peatones (2015 - 2020)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+
+                            id = 'prom_atropellos',
+                            figure = prom_atropellos,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False}
+                        )
+                    )
+                ])
+            ])
+        ]),
+
+        html.Br(),
+
+        # Gráfica de Hechos Viales por Año
+        dbc.Row([
+
+            dbc.Col([
+
+               dbc.Card([
+
+                    dbc.CardHeader(
+                        'Hechos Viales Totales en Vía Libre por Año'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+
+                            id = 'hv_totales',
+                            figure = hv_totales,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False}
+                        )
+                    )
+                ]) 
+            ])
+        ]),
+
+        html.Br(),
+
+        # Tipos y Causas de Hechos Viales
+        dbc.Row([
+
+            # Tipos de Hechos Viales
+            dbc.Col([
+
+               dbc.Card([
+
+                    dbc.CardHeader(
+                        'El alcance es el principal tipo de hecho vial en Vía Libre (2015 - 2020)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+
+                            id = 'hv_tipos',
+                            figure = hv_tipos,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False}
+                        )
+                    )
+                ]) 
+            ]),
+
+            # Causas de Hechos Viales
+            dbc.Col([
+
+               dbc.Card([
+
+                    dbc.CardHeader(
+                        'No guardar distancia es la principal causa de hecho vial en Vía Libre (2015 - 2020)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+
+                            id = 'hv_causas',
+                            figure = hv_causas,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False}
+                        )
+                    )
+                ]) 
+            ])
+        ]),
+
+        html.Br(),
+
+        # Hechos Viales e Intersecciones
+        dbc.Row([
+
+            # Top 10 Intersecciones con más hechos viales
+            dbc.Col([
+
+               dbc.Card([
+
+                    dbc.CardHeader(
+                        'Top 10 Intersecciones con más Hechos Viales (2015 - 2020)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+
+                            id = 'hv_top10',
+                            figure = hv_top10,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False}
+                        )
+                    )
+                ]) 
+            ]),
+
+            # Top 10 Intersecciones con lesionados
+            dbc.Col([
+
+               dbc.Card([
+
+                    dbc.CardHeader(
+                        'Top 10 Intersecciones con más Hechos Viales con al menos un lesionado (2015 - 2020)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+
+                            id = 'hv_top10_lesionados',
+                            figure = hv_top10_lesionados,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False}
+                        )
+                    )
+                ]) 
+            ])
+        ])
+    ])
+
+#----------------------------------------------------------
+
+## Figuras Ficha Técnica - Hechos Viales
+
+# Indicador de Hechos Viales por Año
+prom_hv = go.Figure(go.Indicator(
+    mode = "number",
+    value = 257,
+    domain = {'x': [0, 1], 'y': [0, 1]},
+    title = {"text": "Promedio Anual<br><span style='font-size:0.8em;color:gray'>"}
+))
+
+prom_hv.update_layout(
+     margin = dict(t=0, l=0, r=0, b=0))
+
+prom_hv.update_traces(selector=dict(type='indicator'))
+
+# Indicador de Lesionados por Año
+prom_lesionados = go.Figure(go.Indicator(
+    mode = "number",
+    value = 6,
+    domain = {'x': [0, 1], 'y': [0, 1]},
+    title = {"text": "Promedio Anual<br><span style='font-size:0.8em;color:gray'>"}
+))
+
+prom_lesionados.update_layout(
+     margin = dict(t=0, l=0, r=0, b=0))
+
+prom_lesionados.update_traces(selector=dict(type='indicator'))
+
+# Indicador de Fallecidos por Año
+prom_fallecidos = go.Figure(go.Indicator(
+    mode = "number",
+    value = 0,
+    domain = {'x': [0, 1], 'y': [0, 1]},
+    title = {"text": "Promedio Anual<br><span style='font-size:0.8em;color:gray'>"}
+))
+
+prom_fallecidos.update_layout(
+     margin = dict(t=0, l=0, r=0, b=0))
+
+prom_fallecidos.update_traces(selector=dict(type='indicator'))
+
+# Indicador de Atropellos a Peatones por Año
+prom_atropellos = go.Figure(go.Indicator(
+    mode = "number",
+    value = 5,
+    domain = {'x': [0, 1], 'y': [0, 1]},
+    title = {"text": "Promedio Anual<br><span style='font-size:0.8em;color:gray'>"}
+))
+
+prom_atropellos.update_layout(
+     margin = dict(t=0, l=0, r=0, b=0))
+
+prom_atropellos.update_traces(selector=dict(type='indicator'))
+
+# Gráfica de Hechos Viales por Año en Vía Libre
+hv_anual = {'year': [2015, 2016, 2017, 2018, 2019, 2020],
+            'hechos_viales': [329, 307, 326, 280, 215, 87]}
+
+hv_anual = pd.DataFrame.from_dict(hv_anual)
+
+hv_totales = px.line(hv_anual, x = 'year', y = 'hechos_viales', 
+                      labels = {'year': 'Año',
+                                'hechos_viales': 'Hechos Viales'},
+                      template = 'plotly_white')
+
+hv_totales.update_traces(mode = 'markers+lines', fill = 'tozeroy',
+                          hovertemplate = '<b>%{y}</b><br>')
+
+hv_totales.update_xaxes(showgrid = False, showline = True,
+                         title_text = '')
+
+hv_totales.update_yaxes(title_text = '')
+
+hv_totales.update_layout(hoverlabel = dict(font_size = 16),
+                          hoverlabel_align = 'right',
+                          hovermode = 'x unified')
+
+# Tabla de Tipos de Hechos Viales en Vía Libre
+hv_tipos = go.Figure(data=[go.Table(header = dict(values = ['Tipo de Hecho Vial',
+                                                            'Porcentaje']),
+                                    cells = dict(values = [['Alcance', 'Choque de crucero', 
+                                                            'Estrellamiento', 'Choque lateral',
+                                                            'Choque diverso', 'Atropello',
+                                                            'Otros (incendio, choque de frente y de reversa, caída de persona)'],
+                                                            ['52%', '18%', '13%', '13%',
+                                                            '2%', '0.3%', '1.3%']]))
+                     ])
+
+# Tabla de Causas de Hechos Viales en Vía Libre
+hv_causas = go.Figure(data=[go.Table(header = dict(values = ['Tipo de Hecho Vial',
+                                                            'Porcentaje']),
+                                    cells = dict(values = [['No guardar distancia', 'Invadir carril', 
+                                                            'No respetó semáforo', 'Otros',
+                                                            'Distracción', 'Viró indebidamente',
+                                                            'No respetó alto', 'NA',
+                                                            'Otros (exceso de velocidad, mal estacionado, estado alcohólico)'],
+                                                            ['51%', '13%', '12%', '9%',
+                                                            '7%', '5%', '3%', '1%', '1%']]))
+                     ])
+
+# Gráfica de Top 10 Intersecciones con más Hechos Viales
+hv_intersecciones = {'interseccion': ['ALFONSO REYES CON NEIL ARMSTRONG',
+                                    'ALFONSO REYES CON LAS OLIMPIADAS',
+                                    'ALFONSO REYES CON PADRE MIER',
+                                    'ALFONSO REYES CON MATAMOROS',
+                                    'ALFONSO REYES CON JIMENEZ',
+                                    'ALFONSO REYES CON GENARO GARZA GARCIA',
+                                    'ALFONSO REYES CON CORREGIDORA',
+                                    'ALFONSO REYES CON LAS SENDAS',
+                                    'ALFONSO REYES CON BENITO JUAREZ',
+                                    'ALFONSO REYES CON MONTE FALCO'],
+                    'hechos_viales': [170, 128, 109, 103, 93, 93, 82,
+                                    70, 70, 63]}
+
+hv_intersecciones = pd.DataFrame.from_dict(hv_intersecciones)
+
+hv_top10 = px.bar(hv_intersecciones, x = "hechos_viales", y = "interseccion",
+                  orientation = 'h',
+                  template = 'plotly_white')
+
+hv_top10.update_layout(yaxis={'categoryorder':'total ascending'},
+                          showlegend = False,
+                          uniformtext_minsize = 8,
+                          uniformtext_mode = 'hide')
+
+hv_top10.update_xaxes(showgrid = True,
+                         showline = True, 
+                         title_text = '')
+
+hv_top10.update_yaxes(title_text = '')
+
+hv_top10.update_traces(texttemplate = '<b>%{x}</b>',
+                          textposition = 'inside',
+                          hovertemplate = None,
+                          hoverinfo = 'skip')
+
+# Tabla de Intersecciones con más Hechos Viales con al menos un Lesionado
+hv_top10_lesionados = go.Figure(data=[go.Table(header = dict(values = ['Intersección',
+                                                            'Total Lesionados']),
+                                    cells = dict(values = [['Padre Mier', 'Matamoros', 
+                                                            'Corregidora', 'Las Sendas',
+                                                            'Genaro Garza García', 'Neil Armstrong',
+                                                            'Jiménez', 'Guillermo Prieto',
+                                                            'Santa Bárbara', 'Las Olimpiadas'],
+                                                            [11, 4, 4, 3,
+                                                            3, 2, 2, 2, 1, 1]]))])
+
+#----------------------------------------------------------
 
 #----------------------------------------------------------
 
