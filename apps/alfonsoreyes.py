@@ -1,10 +1,15 @@
 from re import template
 import dash
+from dash_bootstrap_components._components.Card import Card
+from dash_bootstrap_components._components.CardBody import CardBody
 import dash_core_components as dcc
 from dash_core_components.Graph import Graph
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash_html_components.Br import Br
+from dash_html_components.H3 import H3
+from dash_html_components.Span import Span
+from dash_html_components.Table import Table
 import plotly.express as px
 import plotly.graph_objs as go
 import gspread
@@ -118,114 +123,129 @@ def fichatecnica_inicio():
 
         dbc.Row([
 
-            dbc.Col([
+            dbc.CardDeck([
 
                 dbc.Card([
 
-                    dbc.CardHeader(
-                        'Bicicletas por Día (Entre Semana)'
-                    ),
+                    dbc.CardBody([
 
-                    dbc.CardBody(
+                        html.H2(str(int(dias_alfonso['bicycle'].mean().round())), className = 'card-title'),
+                        html.P(
+                            'Bicicletas por día (entre semana)'
+                        ),
+                        html.H5(
 
-                        dcc.Graph(
-
-                            id = 'bicidia_indic_entre',
-                            figure = bicidia_indic_entre,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False}
+                            str(int((((dias_alfonso['bicycle'].mean() / dias_alfonso['bicycle'].iloc[:-5].mean()) - 1) * 100).round())) + '%'
+                            #' respecto de la semana anterior.'
                         )
-                    )
-                ])
-            ]),
-
-            dbc.Col([
+                    ])
+                ]),
 
                 dbc.Card([
 
-                    dbc.CardHeader(
-                        'Bicicletas por Día (Fin de Semana)'
-                    ),
+                    dbc.CardBody([
 
-                    dbc.CardBody(
+                        html.H2(str(int(dias_alfonso['peatones'].mean().round())), className = 'card-title'),
+                        html.P(
+                            'Peatones por día (entre semana)'
+                        ),
+                        html.H5(
 
-                        dcc.Graph(
-
-                            id = 'bicidia_indic_fin',
-                            figure = bicidia_indic_fin,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False}
+                            str(int((((dias_alfonso['peatones'].mean() / dias_alfonso['peatones'].iloc[:-5].mean()) - 1) * 100).round())) + '%'
+                            #' respecto de la semana anterior.'
                         )
-                    )
-                ])
-            ]),
-
-            dbc.Col([
+                    ])
+                ]),
 
                 dbc.Card([
 
-                    dbc.CardHeader(
-                        'Bicicletas por Hora (Entre Semana)'
-                    ),
+                    dbc.CardBody([
 
-                    dbc.CardBody(
+                        html.H2(str(int(dias_promedio['bicycle'].mean().round())), className = 'card-title'),
+                        html.P(
+                            'Bicicletas por hora (entre semana)'
+                        ),
+                         html.H5(
 
-                        dcc.Graph(
-
-                            id = 'bicihora_indic_entre',
-                            figure = bicihora_indic_entre,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False}
-                        )
-                    )
-                ])
-            ]),
-
-            dbc.Col([
+                             str(int((((dias_promedio['bicycle'].mean() / dias_promedio['bicycle'].iloc[:-5].mean()) - 1) * 100).round())) + '%'
+                        #     ' respecto de la semana anterior.'
+                         )
+                    ])
+                ]),
 
                 dbc.Card([
 
-                    dbc.CardHeader(
-                        'Bicicletas por Hora (Fin de Semana)'
-                    ),
+                    dbc.CardBody([
 
-                    dbc.CardBody(
+                        html.H2(str(int(dias_promedio['peatones'].mean().round())), className = 'card-title'),
+                        html.P(
+                            'Peatones por hora (entre semana)'
+                        ),
+                        html.H5(
 
-                        dcc.Graph(
-
-                            id = 'bicihora_indic_fin',
-                            figure = bicihora_indic_fin,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False}
+                            str(int((((dias_promedio['peatones'].mean() / dias_promedio['peatones'].iloc[:-5].mean()) - 1) * 100).round())) + '%'
+                            #' respecto de la semana anterior.'
                         )
-                    )
+                    ])
                 ])
             ])
-        ])
+        ], justify = 'center'),
+
+        html.Br(),
+
+        dbc.Row([
+
+            dbc.Col([
+
+                dbc.Card([
+
+                     dbc.CardHeader(
+                         'Bicicletas por Semana (Entre Semana)'
+                     ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'bici_semana_inicio',
+                            figure = bici_semana,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ]),
+
+                dbc.Card([
+
+                     dbc.CardHeader(
+                         'Peatones por Semana (Entre Semana)'
+                     ),
+
+                    dbc.CardBody([
+
+                        dcc.Graph(
+                            id = 'peatones_semana_inicio',
+                            figure = peatones_semana,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False
+                            }
+                        )
+                    ])
+                ])
+            ], width = 10)
+        ], justify = 'center')
     ])
 
 
@@ -238,20 +258,21 @@ bicidia_indic_entre = go.Figure(go.Indicator(
     mode = "number",
     value = 286,
     domain = {'x': [0, 1], 'y': [0, 1]},
-    title = {"text": "Promedio<br><span style='font-size:0.8em;color:gray'>"}
+    title = {"text": "Promedio"}
 ))
 
 bicidia_indic_entre.update_layout(
-     margin = dict(t=0, l=0, r=0, b=0))
+     width = 375,
+     height = 250)
 
-bicidia_indic_entre.update_traces(selector=dict(type='indicator'))
+bicidia_indic_entre.update_traces(selector = dict(type = 'indicator'))
 
 # Indicador de Bicicletas por Día Fin de Semana
 bicidia_indic_fin = go.Figure(go.Indicator(
     mode = "number",
     value = 567,
     domain = {'x': [0, 1], 'y': [0, 1]},
-    title = {"text": "Promedio<br><span style='font-size:0.8em;color:gray'>"}
+    title = {"text": "Promedio"}
 ))
 
 bicidia_indic_fin.update_layout(
@@ -1233,118 +1254,53 @@ def fichatecnica_hv():
         # Indicadores
         dbc.Row([
 
-            # Hechos Viales
-            dbc.Col([
-
-                dbc.Card([
-                    
-                    dbc.CardHeader(
-                        'Hechos Viales (2015 - 2020)'
-                    ),
-
-                    dbc.CardBody(
-
-                        dcc.Graph(
-
-                            id = 'prom_hv',
-                            figure = prom_hv,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False}
-                        )
-                    )
-                ])
-            ]),
-
-            # Lesionados
-            dbc.Col([
+            dbc.CardDeck([
 
                 dbc.Card([
 
-                    dbc.CardHeader(
-                        'Lesionados (2015 - 2020)'
-                    ),
+                    dbc.CardBody([
 
-                    dbc.CardBody(
-
-                        dcc.Graph(
-
-                            id = 'prom_lesionados',
-                            figure = prom_lesionados,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False}
+                        html.H2('257', className = 'card-title'),
+                        html.P(
+                            'Hechos viales por año (2015-2020)'
                         )
-                    )
-                ])
-            ]),
-
-            # Fallecidos
-            dbc.Col([
+                    ])
+                ]),
 
                 dbc.Card([
 
-                    dbc.CardHeader(
-                        'Fallecidos (2015 - 2020)'
-                    ),
+                    dbc.CardBody([
 
-                    dbc.CardBody(
-
-                        dcc.Graph(
-
-                            id = 'prom_fallecidos',
-                            figure = prom_fallecidos,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False}
+                        html.H2('6', className = 'card-title'),
+                        html.P(
+                            'Lesionados por año (2015-2020)'
                         )
-                    )
-                ])
-            ]),
-
-            # Atropellos a Peatones
-            dbc.Col([
+                    ])
+                ]),
 
                 dbc.Card([
 
-                    dbc.CardHeader(
-                        'Atropellos a Peatones (2015 - 2020)'
-                    ),
+                    dbc.CardBody([
 
-                    dbc.CardBody(
-
-                        dcc.Graph(
-
-                            id = 'prom_atropellos',
-                            figure = prom_atropellos,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False}
+                        html.H2('0', className = 'card-title'),
+                        html.P(
+                            'Fallecidos por año (2015-2020)'
                         )
-                    )
+                    ])
+                ]),
+
+                dbc.Card([
+
+                    dbc.CardBody([
+
+                        html.H2('5', className = 'card-title'),
+                        html.P(
+                            'Atropellos a peatones por año (2015-2020)'
+                        )
+                    ])
                 ])
             ])
-        ]),
+        ], justify = 'center'),
 
         html.Br(),
 
@@ -1376,6 +1332,33 @@ def fichatecnica_hv():
                         )
                     )
                 ]) 
+            ]),
+
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Top 10 Intersecciones con más Hechos Viales (2015 - 2020)'
+                    ),
+
+                    dbc.CardBody(
+
+                        dcc.Graph(
+
+                            id = 'hv_top10_2',
+                            figure = hv_top10_2,
+                            config = {
+                                'modeBarButtonsToRemove':
+                                ['zoom2d', 'lasso2d', 'pan2d',
+                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
+                                'resetScale2d', 'hoverClosestCartesian',
+                                'hoverCompareCartesian', 'toggleSpikelines',
+                                'select2d', 'toImage'],
+                                'displaylogo': False}
+                        )
+                    )
+                ])
             ])
         ]),
 
@@ -1393,22 +1376,13 @@ def fichatecnica_hv():
                         'El alcance es el principal tipo de hecho vial en Vía Libre (2015 - 2020)'
                     ),
 
-                    dbc.CardBody(
+                    dbc.CardBody([
 
-                        dcc.Graph(
-
-                            id = 'hv_tipos',
-                            figure = hv_tipos,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False}
-                        )
-                    )
+                        dbc.Table.from_dataframe(hv_tipos, 
+                                                 striped = True, 
+                                                 bordered = True, 
+                                                 hover = True)
+                    ])
                 ]) 
             ]),
 
@@ -1421,22 +1395,13 @@ def fichatecnica_hv():
                         'No guardar distancia es la principal causa de hecho vial en Vía Libre (2015 - 2020)'
                     ),
 
-                    dbc.CardBody(
+                    dbc.CardBody([
 
-                        dcc.Graph(
-
-                            id = 'hv_causas',
-                            figure = hv_causas,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False}
-                        )
-                    )
+                        dbc.Table.from_dataframe(hv_causas, 
+                                                 striped = True, 
+                                                 bordered = True, 
+                                                 hover = True)
+                    ])
                 ]) 
             ])
         ]),
@@ -1483,22 +1448,13 @@ def fichatecnica_hv():
                         'Top 10 Intersecciones con más Hechos Viales con al menos un lesionado (2015 - 2020)'
                     ),
 
-                    dbc.CardBody(
+                    dbc.CardBody([
 
-                        dcc.Graph(
-
-                            id = 'hv_top10_lesionados',
-                            figure = hv_top10_lesionados,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False}
-                        )
-                    )
+                        dbc.Table.from_dataframe(hv_top10_lesionados, 
+                                                 striped = True, 
+                                                 bordered = True, 
+                                                 hover = True)
+                    ])
                 ]) 
             ])
         ])
@@ -1584,27 +1540,24 @@ hv_totales.update_layout(hoverlabel = dict(font_size = 16),
                           hovermode = 'x unified')
 
 # Tabla de Tipos de Hechos Viales en Vía Libre
-hv_tipos = go.Figure(data=[go.Table(header = dict(values = ['Tipo de Hecho Vial',
-                                                            'Porcentaje']),
-                                    cells = dict(values = [['Alcance', 'Choque de crucero', 
-                                                            'Estrellamiento', 'Choque lateral',
-                                                            'Choque diverso', 'Atropello',
-                                                            'Otros (incendio, choque de frente y de reversa, caída de persona)'],
-                                                            ['52%', '18%', '13%', '13%',
-                                                            '2%', '0.3%', '1.3%']]))
-                     ])
+hv_tipos = pd.DataFrame(
+    {
+        'Tipo de Hecho Vial': ['Alcance', 'Choque de crucero', 'Estrellamiento',
+                                'Choque lateral', 'Choque diverso', 'Atropello',
+                                'Otros (incendio, choque de frente y de reversa, caída de persona)'],
+        'Proporción': ['52%', '18%', '13%', '13%', '2%', '0.3%', '1.3%']
+    }
+)
 
 # Tabla de Causas de Hechos Viales en Vía Libre
-hv_causas = go.Figure(data=[go.Table(header = dict(values = ['Tipo de Hecho Vial',
-                                                            'Porcentaje']),
-                                    cells = dict(values = [['No guardar distancia', 'Invadir carril', 
-                                                            'No respetó semáforo', 'Otros',
-                                                            'Distracción', 'Viró indebidamente',
-                                                            'No respetó alto', 'NA',
-                                                            'Otros (exceso de velocidad, mal estacionado, estado alcohólico)'],
-                                                            ['51%', '13%', '12%', '9%',
-                                                            '7%', '5%', '3%', '1%', '1%']]))
-                     ])
+hv_causas = pd.DataFrame(
+    {
+        'Causa de Hecho Vial': ['No guardar distancia', 'Invadir carril', 'No respetó semáforo',
+                                'Otros','Distracción', 'Viró indebidamente', 'No respetó alto',
+                                'NA', 'Otros (exceso de velocidad, mal estacionado, estado alcohólico)'],
+        'Proporción': ['51%', '13%', '12%', '9%', '7%', '5%', '3%', '1%', '1%']
+    }
+)
 
 # Gráfica de Top 10 Intersecciones con más Hechos Viales
 hv_intersecciones = {'interseccion': ['ALFONSO REYES CON NEIL ARMSTRONG',
@@ -1642,16 +1595,44 @@ hv_top10.update_traces(texttemplate = '<b>%{x}</b>',
                           hovertemplate = None,
                           hoverinfo = 'skip')
 
+hv_intersecciones2 = {'interseccion': ['NEIL ARMSTRONG', 'LAS OLIMPIADAS',
+                                    'PADRE MIER', 'MATAMOROS', 'JIMENEZ',
+                                    'GENARO GARZA GARCIA', 'CORREGIDORA',
+                                    'LAS SENDAS', 'BENITO JUAREZ', 'MONTE FALCO'],
+                    'hechos_viales': [170, 128, 109, 103, 93, 93, 82,
+                                    70, 70, 63]}
+
+hv_intersecciones2 = pd.DataFrame.from_dict(hv_intersecciones2)
+
+hv_top10_2 = px.bar(hv_intersecciones2, x = "hechos_viales", y = "interseccion",
+                  orientation = 'h',
+                  template = 'plotly_white')
+
+hv_top10_2.update_layout(yaxis={'categoryorder':'total ascending'},
+                          showlegend = False,
+                          uniformtext_minsize = 8,
+                          uniformtext_mode = 'hide')
+
+hv_top10_2.update_xaxes(showgrid = True,
+                         showline = True, 
+                         title_text = '')
+
+hv_top10_2.update_yaxes(title_text = '')
+
+hv_top10_2.update_traces(texttemplate = '<b>%{x}</b>',
+                          textposition = 'inside',
+                          hovertemplate = None,
+                          hoverinfo = 'skip')
+
 # Tabla de Intersecciones con más Hechos Viales con al menos un Lesionado
-hv_top10_lesionados = go.Figure(data=[go.Table(header = dict(values = ['Intersección',
-                                                            'Total Lesionados']),
-                                    cells = dict(values = [['Padre Mier', 'Matamoros', 
-                                                            'Corregidora', 'Las Sendas',
-                                                            'Genaro Garza García', 'Neil Armstrong',
-                                                            'Jiménez', 'Guillermo Prieto',
-                                                            'Santa Bárbara', 'Las Olimpiadas'],
-                                                            [11, 4, 4, 3,
-                                                            3, 2, 2, 2, 1, 1]]))])
+hv_top10_lesionados = pd.DataFrame(
+    {
+        'Intersección': ['Padre Mier', 'Matamoros', 'Corregidora', 'Las Sendas',
+                         'Genaro Garza García', 'Neil Armstrong', 'Jiménez', 
+                         'Guillermo Prieto', 'Santa Bárbara', 'Las Olimpiadas'],
+        'Total Lesionados': [11, 4, 4, 3, 3, 2, 2, 2, 1, 1]
+    }
+)
 
 #----------------------------------------------------------
 
