@@ -2,12 +2,18 @@ from re import template
 import dash
 from dash_bootstrap_components._components.Card import Card
 from dash_bootstrap_components._components.CardBody import CardBody
+from dash_bootstrap_components._components.Row import Row
 import dash_core_components as dcc
 from dash_core_components.Graph import Graph
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash_html_components.Br import Br
+from dash_html_components.Col import Col
+from dash_html_components.Div import Div
 from dash_html_components.H3 import H3
+from dash_html_components.H5 import H5
+from dash_html_components.I import I
+from dash_html_components.P import P
 from dash_html_components.Span import Span
 from dash_html_components.Table import Table
 import plotly.express as px
@@ -63,9 +69,9 @@ def alfonsoreyes():
                                     disabled = False),
                             
                             # Gráficas Pre-JL
-                            dbc.Tab(label = 'Conteo y Velocidad',
-                                    tab_id = 'alfonsoreyes_1',
-                                    disabled = True)
+                            #dbc.Tab(label = 'Conteo y Velocidad',
+                            #        tab_id = 'alfonsoreyes_1',
+                            #        disabled = True)
                         ],
                         id='tabs',
                         active_tab = 'fichatecnica_inicio',
@@ -111,8 +117,8 @@ def render_alfonsoreyes(tab):
         return fichatecnica_reparto()
     elif tab == 'fichatecnica_hv':
         return fichatecnica_hv()
-    elif tab == 'alfonsoreyes_1':
-        return alfonsoreyes_1()
+    #elif tab == 'alfonsoreyes_1':
+    #    return alfonsoreyes_1()
 
 #----------------------------------------------------------
 
@@ -123,72 +129,67 @@ def fichatecnica_inicio():
 
         dbc.Row([
 
-            dbc.CardDeck([
+            dbc.Col([
 
                 dbc.Card([
 
                     dbc.CardBody([
 
-                        html.H2(str(int(dias_alfonso['bicycle'].mean().round())), className = 'card-title'),
-                        html.P(
-                            'Bicicletas por día (entre semana)'
-                        ),
-                        html.H5(
+                        dbc.Row([
 
-                            str(int((((dias_alfonso['bicycle'].mean() / dias_alfonso['bicycle'].iloc[:-5].mean()) - 1) * 100).round())) + '%'
-                            #' respecto de la semana anterior.'
-                        )
+                            dbc.Col([
+
+                                html.P(
+                                    'Bicicletas por Día'
+                                ),
+                                html.H2(str(int(dias_alfonso['bicycle'].iloc[-5:].mean().round())), className = 'card-title'),
+                                html.H5(
+                                    str(int((((dias_alfonso['bicycle'].iloc[-5:].mean() / dias_alfonso['bicycle'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%'
+                                )
+                            ]),
+
+                            dbc.Col([
+
+                                html.P(className = 'fa fa-bicyle')
+                            ])
+                        ])
                     ])
-                ]),
+                ])
+            ], width = 3),
+
+            dbc.Col([
 
                 dbc.Card([
 
                     dbc.CardBody([
 
-                        html.H2(str(int(dias_alfonso['peatones'].mean().round())), className = 'card-title'),
                         html.P(
-                            'Peatones por día (entre semana)'
+                            'Peatones por Día'
                         ),
+                        html.H2(str(int(dias_alfonso['peatones'].iloc[-5:].mean().round())), className = 'card-title'),
                         html.H5(
-
-                            str(int((((dias_alfonso['peatones'].mean() / dias_alfonso['peatones'].iloc[:-5].mean()) - 1) * 100).round())) + '%'
-                            #' respecto de la semana anterior.'
-                        )
-                    ])
-                ]),
-
-                dbc.Card([
-
-                    dbc.CardBody([
-
-                        html.H2(str(int(dias_promedio['bicycle'].mean().round())), className = 'card-title'),
-                        html.P(
-                            'Bicicletas por hora (entre semana)'
-                        ),
-                         html.H5(
-
-                             str(int((((dias_promedio['bicycle'].mean() / dias_promedio['bicycle'].iloc[:-5].mean()) - 1) * 100).round())) + '%'
-                        #     ' respecto de la semana anterior.'
-                         )
-                    ])
-                ]),
-
-                dbc.Card([
-
-                    dbc.CardBody([
-
-                        html.H2(str(int(dias_promedio['peatones'].mean().round())), className = 'card-title'),
-                        html.P(
-                            'Peatones por hora (entre semana)'
-                        ),
-                        html.H5(
-
-                            str(int((((dias_promedio['peatones'].mean() / dias_promedio['peatones'].iloc[:-5].mean()) - 1) * 100).round())) + '%'
-                            #' respecto de la semana anterior.'
+                            str(int((((dias_alfonso['peatones'].iloc[-5:].mean() / dias_alfonso['peatones'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%'
                         )
                     ])
                 ])
-            ])
+            ], width = 3),
+
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardBody([
+
+                        html.P(
+                            'Velocidad Promedio'
+                        ),
+                        html.H2(str(int(vel_dia['avg_vel_car'].iloc[-5:].mean().round())) + ' km/h', className = 'card-title'),
+                        html.H5(
+                             str(int((((vel_dia['avg_vel_car'].iloc[-5:].mean() / vel_dia['avg_vel_car'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%'
+                        )
+                    ])
+                ])
+            ], width = 3)
         ], justify = 'center'),
 
         html.Br(),
@@ -199,15 +200,15 @@ def fichatecnica_inicio():
 
                 dbc.Card([
 
-                     dbc.CardHeader(
-                         'Bicicletas por Semana (Entre Semana)'
-                     ),
+                    #  dbc.CardHeader(
+                    #      'Bicicletas por Semana (Entre Semana)'
+                    #  ),
 
                     dbc.CardBody([
 
                         dcc.Graph(
-                            id = 'bici_semana_inicio',
-                            figure = bici_semana,
+                            id = 'mapa_vialibre',
+                            figure = mapa_vialibre,
                             config = {
                                 'modeBarButtonsToRemove':
                                 ['zoom2d', 'lasso2d', 'pan2d',
@@ -216,31 +217,8 @@ def fichatecnica_inicio():
                                 'hoverCompareCartesian', 'toggleSpikelines',
                                 'select2d', 'toImage'],
                                 'displaylogo': False
-                            }
-                        )
-                    ])
-                ]),
-
-                dbc.Card([
-
-                     dbc.CardHeader(
-                         'Peatones por Semana (Entre Semana)'
-                     ),
-
-                    dbc.CardBody([
-
-                        dcc.Graph(
-                            id = 'peatones_semana_inicio',
-                            figure = peatones_semana,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False
-                            }
+                            },
+                            style = {'height':'100%', 'padding':'0'}
                         )
                     ])
                 ])
@@ -248,6 +226,36 @@ def fichatecnica_inicio():
         ], justify = 'center')
     ])
 
+# MAPA
+
+mapbox_access_token = 'pk.eyJ1IjoiZWRnYXJndHpnenoiLCJhIjoiY2s4aHRoZTBjMDE4azNoanlxbmhqNjB3aiJ9.PI_g5CMTCSYw0UM016lKPw'
+px.set_mapbox_access_token(mapbox_access_token)
+
+sendas_punto = gpd.read_file('assets/las_sendas.geojson')
+
+mapa_vialibre = go.Figure(
+    px.scatter_mapbox(
+        sendas_punto,
+        lat = sendas_punto.geometry.y,
+        lon = sendas_punto.geometry.x,
+        zoom = 15
+    )
+)
+
+mapa_vialibre.update_layout(
+    mapbox = dict(
+        accesstoken = mapbox_access_token,
+        style = 'dark'
+    ),
+    autosize = True,
+    hovermode = 'closest',
+    margin = dict(t=0, l=0, r=0, b=0)
+)
+
+mapa_vialibre.update_traces(
+    marker_color="#c6cc14",
+    marker_size = 20
+)
 
 #----------------------------------------------------------
 
@@ -1068,6 +1076,13 @@ vel_alfonso = ficha_alfonso.drop(['fecha', 'mes', 'semana', 'dia_semana',
                                     'van', 'truck', 'autos', 'bus'], axis = 1)
 
 vel_alfonso = vel_alfonso.groupby('hora', as_index = False).mean()
+
+vel_dia = ficha_alfonso.drop(['hora', 'mes', 'semana', 'dia_semana',
+                                   'child', 'hombre', 'mujer', 'peatones',
+                                   'bicycle', 'motorcycle', 'autos', 'pickup',
+                                    'van', 'truck', 'autos', 'bus'], axis = 1)
+
+vel_dia = vel_dia.groupby('fecha', as_index = False).mean()
 
 # Gráfica de Velocidad Promedio por Hora de Autos Particulares
 vel_autos = px.line(vel_alfonso, x = 'hora', y = 'avg_vel_car',
