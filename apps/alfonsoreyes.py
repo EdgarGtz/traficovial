@@ -172,10 +172,14 @@ def fichatecnica_inicio():
 
                                         dbc.ModalHeader(html.B('Bicicletas por Día')),
 
-                                        dbc.ModalBody(
-                                            'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo)'
-                                            'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
-                                        ),
+                                        dbc.ModalBody([
+                                            html.P(
+                                                'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
+                                            ),
+                                            html.P(
+                                                'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
+                                            )
+                                        ]),
 
                                         dbc.ModalFooter([
                                             dbc.Button(
@@ -249,10 +253,14 @@ def fichatecnica_inicio():
 
                                         dbc.ModalHeader(html.B('Peatones por Día')),
 
-                                        dbc.ModalBody(
-                                            'Promedio de peatones por día tomado de la semana anterior (Lunes a Domingo)'
-                                            'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
-                                        ),
+                                        dbc.ModalBody([
+                                            html.P(
+                                                'Promedio de peatones por día tomado de la semana anterior (Lunes a Domingo).'
+                                            ),
+                                            html.P(
+                                                'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
+                                            )
+                                        ]),
 
                                         dbc.ModalFooter([
                                             dbc.Button(
@@ -325,10 +333,14 @@ def fichatecnica_inicio():
 
                                         dbc.ModalHeader(html.B('Velocidad Promedio de Autos')),
 
-                                        dbc.ModalBody(
-                                            'Velocidad promedio de autos por día tomado de la semana anterior (Lunes a Domingo)'
-                                            'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
-                                        ),
+                                        dbc.ModalBody([
+                                            html.P(
+                                                'Velocidad promedio de autos por día tomado de la semana anterior (Lunes a Domingo).'
+                                            ),
+                                            html.P(
+                                                'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
+                                            )
+                                        ]),
 
                                         dbc.ModalFooter([
                                             dbc.Button(
@@ -355,7 +367,7 @@ def fichatecnica_inicio():
                                     style = {'float': 'left'}),
                                     html.H6(
                                     str(int((((vel_dia['avg_vel_car'].iloc[-5:].mean() / vel_dia['avg_vel_car'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%',
-                                    style = {'color': 'red', 'float': 'left'},
+                                    style = {'color': 'green', 'float': 'left'},
                                     className = 'pt-4 pl-2'
                                     )
                                 ]) 
@@ -482,7 +494,7 @@ mapa_vialibre.update_layout(
         accesstoken = mapbox_access_token,
         style = 'dark'
     ),
-    autosize = True,
+    height = 800,
     hovermode = 'closest',
     margin = dict(t=0, l=0, r=0, b=0)
 )
