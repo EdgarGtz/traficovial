@@ -170,9 +170,10 @@ def fichatecnica_inicio():
 
                                     dbc.Modal([
 
-                                        dbc.ModalHeader(html.B('Detalles del Indicador')),
+                                        dbc.ModalHeader(html.B('Bicicletas por Día')),
 
                                         dbc.ModalBody(
+                                            'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo)'
                                             'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
                                         ),
 
@@ -246,9 +247,10 @@ def fichatecnica_inicio():
 
                                     dbc.Modal([
 
-                                        dbc.ModalHeader(html.B('Detalles del Indicador')),
+                                        dbc.ModalHeader(html.B('Peatones por Día')),
 
                                         dbc.ModalBody(
+                                            'Promedio de peatones por día tomado de la semana anterior (Lunes a Domingo)'
                                             'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
                                         ),
 
@@ -321,9 +323,10 @@ def fichatecnica_inicio():
 
                                     dbc.Modal([
 
-                                        dbc.ModalHeader(html.B('Detalles del Indicador')),
+                                        dbc.ModalHeader(html.B('Velocidad Promedio de Autos')),
 
                                         dbc.ModalBody(
+                                            'Velocidad promedio de autos por día tomado de la semana anterior (Lunes a Domingo)'
                                             'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
                                         ),
 
@@ -342,7 +345,7 @@ def fichatecnica_inicio():
                                     is_open=False),
 
                                     html.P(
-                                        'Velocidad Promedio', style={'width':'90%','float':'left'}, className='pl-1'
+                                        'Velocidad Promedio de Autos', style={'width':'90%','float':'left'}, className='pl-1'
                                     )
                                 ]),
 
@@ -401,7 +404,7 @@ def fichatecnica_inicio():
                     ),
 
                     dbc.CardBody([
-                        'La información proviene de los datos reportados entre el 26 de julio y el 19 de septiembre en el cruce de Alfonso Reyes y Las Sendas.'
+                        'La información proviene de los datos reportados por la cámara vial inteligente ubicada en el cruce de Alfonso Reyes y Las Sendas entre el 26 de julio y el 19 de septiembre.'
                     ])
                 ])
             ])
