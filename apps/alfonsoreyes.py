@@ -25,6 +25,8 @@ import geopandas as gpd
 from datetime import datetime as dt
 import numpy as np
 from datetime import timedelta
+import shapely.geometry
+import base64
 
 #----------------------------------------------------------
 
@@ -120,89 +122,249 @@ def render_alfonsoreyes(tab):
     #elif tab == 'alfonsoreyes_1':
     #    return alfonsoreyes_1()
 
+# FOTOS
+img2 = 'assets/informacion.png' # replace with your own image
+encoded_img2 = base64.b64encode(open(img2, 'rb').read()).decode('ascii')
+
 #----------------------------------------------------------
 
 ## Layout Ficha Técnica - Inicio
 
 def fichatecnica_inicio():
     return html.Div([
-
+        
         dbc.Row([
 
             dbc.Col([
 
-                dbc.Card([
+                dbc.Row([
 
-                    dbc.CardBody([
+                    dbc.Col([
 
-                        dbc.Row([
+                        dbc.Card([
 
-                            dbc.Col([
+                            dbc.CardBody([
 
-                                html.P(
-                                    'Bicicletas por Día'
-                                ),
-                                html.H2(str(int(dias_alfonso['bicycle'].iloc[-5:].mean().round())), className = 'card-title'),
-                                html.H5(
-                                    str(int((((dias_alfonso['bicycle'].iloc[-5:].mean() / dias_alfonso['bicycle'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%'
-                                )
-                            ]),
+                                html.Div([
 
-                            dbc.Col([
+                                    html.Span([
+                                        
+                                        dbc.Button(
+                                            html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+                                                        style={'float':'right'},
+                                                        className="p-0 img-fluid"), 
+                                                id="open1_sev", 
+                                                n_clicks=0, 
+                                                style={'display':'inline-block',
+                                                        'float':'left','padding':'0', 
+                                                        'width':'15px','background-color':'transparent',
+                                                        'border-color':'transparent','padding-top':'5px'},
+                                                className='rounded-circle'
+                                        ),  
+                                    ], id = 'tooltip-target-sev'),
 
-                                html.P(className = 'fa fa-bicyle')
+                                    dbc.Tooltip(
+                                        'Más información',
+                                        target = 'tooltip-target-sev'
+                                    ),
+
+                                    dbc.Modal([
+
+                                        dbc.ModalHeader(html.B('Detalles del Indicador')),
+
+                                        dbc.ModalBody(
+                                            'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
+                                        ),
+
+                                        dbc.ModalFooter([
+                                            dbc.Button(
+                                                "Cerrar", 
+                                                id="close1_sev", 
+                                                className="ml-auto btn btn-secondary", 
+                                                n_clicks=0
+                                            )
+                                        ])
+                                    ],
+                                    id="modal_sev",
+                                    centered=True,
+                                    size="lg",
+                                    is_open=False),
+
+                                    html.P(
+                                        ' Bicicletas por Día', style={'width':'90%','float':'left'}, className='pl-1'
+                                    )
+                                ]),
+
+                                html.Div([
+                                    html.H1(str(int(dias_alfonso['bicycle'].iloc[-5:].mean().round())),
+                                    style = {'float': 'left'}
+                                    ),
+                                    html.H6(
+                                    '+' + str(int((((dias_alfonso['bicycle'].iloc[-5:].mean() / dias_alfonso['bicycle'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%',
+                                    style = {'color': 'green',
+                                            'float': 'left'},
+                                    className = 'pt-4 pl-2'
+                                    )
+                                ])
                             ])
                         ])
                     ])
+                ]),
+
+                html.Br(),
+
+                dbc.Row([
+
+                    dbc.Col([
+
+                        dbc.Card([
+
+                            dbc.CardBody([
+
+                               html.Div([
+
+                                    html.Span([
+                                        
+                                        dbc.Button(
+                                            html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+                                                        style={'float':'right'},
+                                                        className="p-0 img-fluid"), 
+                                                id="open1_peatones", 
+                                                n_clicks=0, 
+                                                style={'display':'inline-block',
+                                                        'float':'left','padding':'0', 
+                                                        'width':'15px','background-color':'transparent',
+                                                        'border-color':'transparent','padding-top':'5px'},
+                                                className='rounded-circle'
+                                        ),  
+                                    ], id = 'tooltip-target-peatones'),
+
+                                    dbc.Tooltip(
+                                        'Más información',
+                                        target = 'tooltip-target-peatones'
+                                    ),
+
+                                    dbc.Modal([
+
+                                        dbc.ModalHeader(html.B('Detalles del Indicador')),
+
+                                        dbc.ModalBody(
+                                            'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
+                                        ),
+
+                                        dbc.ModalFooter([
+                                            dbc.Button(
+                                                "Cerrar", 
+                                                id="close1_peatones", 
+                                                className="ml-auto btn btn-secondary", 
+                                                n_clicks=0
+                                            )
+                                        ])
+                                    ],
+                                    id="modal_peatones",
+                                    centered=True,
+                                    size="lg",
+                                    is_open=False),
+
+                                    html.P(
+                                        ' Peatones por Día', style={'width':'90%','float':'left'}, className='pl-1'
+                                    )
+                                ]),
+
+                                html.Div([
+                                    html.H1(str(int(dias_alfonso['peatones'].iloc[-5:].mean().round())),
+                                    style = {'float': 'left'}),
+                                    html.H6(
+                                    '+' + str(int((((dias_alfonso['peatones'].iloc[-5:].mean() / dias_alfonso['peatones'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%',
+                                    style = {'color': 'green',
+                                             'float': 'left'},
+                                    className = 'pt-4 pl-2'
+                                    )
+                                ])  
+                            ])
+                        ])
+                    ]) 
+                ]),
+
+                html.Br(),
+
+                dbc.Row([
+
+                    dbc.Col([
+
+                        dbc.Card([
+
+                            dbc.CardBody([
+
+                                html.Div([
+
+                                    html.Span([
+                                        
+                                        dbc.Button(
+                                            html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+                                                        style={'float':'right'},
+                                                        className="p-0 img-fluid"), 
+                                                id="open1_vel", 
+                                                n_clicks=0, 
+                                                style={'display':'inline-block',
+                                                        'float':'left','padding':'0', 
+                                                        'width':'15px','background-color':'transparent',
+                                                        'border-color':'transparent','padding-top':'5px'},
+                                                className='rounded-circle'
+                                        ),  
+                                    ], id = 'tooltip-target-vel'),
+
+                                    dbc.Tooltip(
+                                        'Más información',
+                                        target = 'tooltip-target-vel'
+                                    ),
+
+                                    dbc.Modal([
+
+                                        dbc.ModalHeader(html.B('Detalles del Indicador')),
+
+                                        dbc.ModalBody(
+                                            'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
+                                        ),
+
+                                        dbc.ModalFooter([
+                                            dbc.Button(
+                                                "Cerrar", 
+                                                id="close1_vel", 
+                                                className="ml-auto btn btn-secondary", 
+                                                n_clicks=0
+                                            )
+                                        ])
+                                    ],
+                                    id="modal_vel",
+                                    centered=True,
+                                    size="lg",
+                                    is_open=False),
+
+                                    html.P(
+                                        'Velocidad Promedio', style={'width':'90%','float':'left'}, className='pl-1'
+                                    )
+                                ]),
+
+                                html.Div([
+
+                                    html.H1(str(int(vel_dia['avg_vel_car'].iloc[-5:].mean().round())) + ' km/h',
+                                    style = {'float': 'left'}),
+                                    html.H6(
+                                    str(int((((vel_dia['avg_vel_car'].iloc[-5:].mean() / vel_dia['avg_vel_car'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%',
+                                    style = {'color': 'red', 'float': 'left'},
+                                    className = 'pt-4 pl-2'
+                                    )
+                                ]) 
+                            ])
+                        ])
+                    ])  
                 ])
-            ], width = 3),
+            ]),
 
             dbc.Col([
 
                 dbc.Card([
-
-                    dbc.CardBody([
-
-                        html.P(
-                            'Peatones por Día'
-                        ),
-                        html.H2(str(int(dias_alfonso['peatones'].iloc[-5:].mean().round())), className = 'card-title'),
-                        html.H5(
-                            str(int((((dias_alfonso['peatones'].iloc[-5:].mean() / dias_alfonso['peatones'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%'
-                        )
-                    ])
-                ])
-            ], width = 3),
-
-            dbc.Col([
-
-                dbc.Card([
-
-                    dbc.CardBody([
-
-                        html.P(
-                            'Velocidad Promedio'
-                        ),
-                        html.H2(str(int(vel_dia['avg_vel_car'].iloc[-5:].mean().round())) + ' km/h', className = 'card-title'),
-                        html.H5(
-                             str(int((((vel_dia['avg_vel_car'].iloc[-5:].mean() / vel_dia['avg_vel_car'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%'
-                        )
-                    ])
-                ])
-            ], width = 3)
-        ], justify = 'center'),
-
-        html.Br(),
-
-        dbc.Row([
-
-            dbc.Col([
-
-                dbc.Card([
-
-                    #  dbc.CardHeader(
-                    #      'Bicicletas por Semana (Entre Semana)'
-                    #  ),
 
                     dbc.CardBody([
 
@@ -216,15 +378,52 @@ def fichatecnica_inicio():
                                 'resetScale2d', 'hoverClosestCartesian',
                                 'hoverCompareCartesian', 'toggleSpikelines',
                                 'select2d', 'toImage'],
-                                'displaylogo': False
+                                'displaylogo': False,
+                                'displayModeBar': False
                             },
-                            style = {'height':'100%', 'padding':'0'}
+                            className = 'h-100'
                         )
+                    ], style={'padding':'10px'})
+                ])
+            ], width = 9)
+        ]),
+
+        html.Br(),
+
+        dbc.Row([
+
+            dbc.Col([
+
+                dbc.Card([
+
+                    dbc.CardHeader(
+                        'Información Adicional'
+                    ),
+
+                    dbc.CardBody([
+                        'La información proviene de los datos reportados entre el 26 de julio y el 19 de septiembre en el cruce de Alfonso Reyes y Las Sendas.'
                     ])
                 ])
-            ], width = 10)
-        ], justify = 'center')
+            ])
+        ])
     ])
+
+
+def toggle_modal_sev(open1_sev, close1_sev, modal_sev):
+    if open1_sev or close1_sev:
+        return not modal_sev
+    return modal_sev
+
+def toggle_modal_peatones(open1_peatones, close1_peatones, modal_peatones):
+    if open1_peatones or close1_peatones:
+        return not modal_peatones
+    return modal_peatones
+
+
+def toggle_modal_vel(open1_vel, close1_vel, modal_vel):
+    if open1_vel or close1_vel:
+        return not modal_vel
+    return modal_vel
 
 # MAPA
 
@@ -232,15 +431,48 @@ mapbox_access_token = 'pk.eyJ1IjoiZWRnYXJndHpnenoiLCJhIjoiY2s4aHRoZTBjMDE4azNoan
 px.set_mapbox_access_token(mapbox_access_token)
 
 sendas_punto = gpd.read_file('assets/las_sendas.geojson')
+vialibre_linea = gpd.read_file('assets/vialibre.geojson')
+
+lats = []
+lons = []
+names = []
+
+for feature, name in zip(vialibre_linea.geometry, vialibre_linea.name):
+    if isinstance(feature, shapely.geometry.linestring.LineString):
+        linestrings = [feature]
+    elif isinstance(feature, shapely.geometry.multilinestring.MultiLineString):
+        linestrings = feature.geoms
+    else:
+        continue
+    for linestring in linestrings:
+        x, y = linestring.xy
+        lats = np.append(lats, y)
+        lons = np.append(lons, x)
+        names = np.append(names, [name]*len(y))
+        lats = np.append(lats, None)
+        lons = np.append(lons, None)
+        names = np.append(names, None)
 
 mapa_vialibre = go.Figure(
-    px.scatter_mapbox(
-        sendas_punto,
-        lat = sendas_punto.geometry.y,
-        lon = sendas_punto.geometry.x,
-        zoom = 15
+    px.line_mapbox(
+        lat = lats,
+        lon = lons,
+        hover_name = names,
+        zoom = 14,
+        center = {
+            'lat': 25.65499,
+            'lon': -100.4035
+        }
     )
 )
+
+sendas = px.scatter_mapbox(
+    sendas_punto,
+    lat = sendas_punto.geometry.y,
+    lon = sendas_punto.geometry.x
+)
+
+mapa_vialibre.add_trace(sendas.data[0])
 
 mapa_vialibre.update_layout(
     mapbox = dict(
@@ -253,9 +485,11 @@ mapa_vialibre.update_layout(
 )
 
 mapa_vialibre.update_traces(
-    marker_color="#c6cc14",
-    marker_size = 20
-)
+     marker_color="#c6cc14",
+     marker_size = 20
+ )
+
+
 
 #----------------------------------------------------------
 

@@ -48,7 +48,7 @@ server = app.server
 # Connect to app pages
 from apps import home
 from apps.alfonsoreyes import (alfonsoreyes, render_alfonsoreyes, render_conteo,
-	render_opciones)
+	render_opciones, toggle_modal_sev, toggle_modal_peatones, toggle_modal_vel)
 
 
 # App Layout
@@ -116,5 +116,43 @@ def get_ayuda(tab):
     return render_alfonsoreyes(tab)
 
 
+
+# MODAL
+@app.callback(
+    Output("modal_sev", "is_open"),
+    [Input("open1_sev", "n_clicks"), 
+    Input("close1_sev", "n_clicks")],
+    [State("modal_sev", "is_open")],)
+
+def toggle_modal_sev(open1_sev, close1_sev, modal_sev):
+    if open1_sev or open1_sev:
+        return not modal_sev
+    return modal_sev
+
+# MODAL
+@app.callback(
+    Output("modal_peatones", "is_open"),
+    [Input("open1_peatones", "n_clicks"), 
+    Input("close1_peatones", "n_clicks")],
+    [State("modal_peatones", "is_open")],)
+
+def toggle_modal_peatones(open1_peatones, close1_peatones, modal_peatones):
+    if open1_peatones or close1_peatones:
+        return not modal_peatones
+    return modal_peatones
+
+# MODAL
+@app.callback(
+    Output("modal_vel", "is_open"),
+    [Input("open1_vel", "n_clicks"), 
+    Input("close1_vel", "n_clicks")],
+    [State("modal_vel", "is_open")],)
+
+def toggle_modal_vel(open1_vel, close1_vel, modal_vel):
+    if open1_vel or close1_vel:
+        return not modal_vel
+    return modal_vel
+
 if __name__ == '__main__':
 	app.run_server(debug=True)
+
