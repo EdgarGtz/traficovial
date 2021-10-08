@@ -177,7 +177,7 @@ def fichatecnica_inicio():
                                                 'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
                                             html.P(
-                                                'El cambio porcentual se obtiene comparando el promedio de la semana pasada contra el de hace 2 semanas.'
+                                                'El cambio porcentual se obtiene comparando el promedio de la anterior pasada contra el de hace 2 semanas.'
                                             )
                                         ]),
 
@@ -258,7 +258,7 @@ def fichatecnica_inicio():
                                                 'Promedio de peatones por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
                                             html.P(
-                                                'El cambio porcentual se obtiene comparando el promedio de la semana pasada contra el de hace 2 semanas.'
+                                                'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
                                             )
                                         ]),
 
@@ -338,7 +338,7 @@ def fichatecnica_inicio():
                                                 'Velocidad promedio de autos por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
                                             html.P(
-                                                'El cambio porcentual se obtiene comparando el promedio de la semana pasada contra el de hace 2 semanas.'
+                                                'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
                                             )
                                         ]),
 
