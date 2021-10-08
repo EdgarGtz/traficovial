@@ -177,7 +177,7 @@ def fichatecnica_inicio():
                                                 'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
                                             html.P(
-                                                'El cambio porcentual se obtiene comparando el promedio de la anterior pasada contra el de hace 2 semanas.'
+                                                'El cambio porcentual se obtiene comparando el promedio de la anterior contra el de hace 2 semanas.'
                                             )
                                         ]),
 
@@ -396,7 +396,7 @@ def fichatecnica_inicio():
                                 'displaylogo': False,
                                 'displayModeBar': False
                             },
-                            className = 'h-100'
+                            className = 'h-100 w-100'
                         )
                     ], style={'padding':'10px'})
                 ])
@@ -524,12 +524,11 @@ mapa_vialibre.update_layout(
         x = 0.83,
         font = dict(
             family = 'Helvetica',
-            color = 'white'#'rgba(0, 0, 0, 0.6)'
+            color = 'white'
         ),
-        bgcolor = 'rgba(128, 128, 128, 0.4)'#,
-        # bordercolor = 'black',
-        # borderwidth = 1
-    )
+        bgcolor = 'rgba(128, 128, 128, 0.4)'
+    ),
+    margin = dict(autoexpand = False)
 )
 
 
