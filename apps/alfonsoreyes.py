@@ -143,6 +143,21 @@ def fichatecnica_inicio():
 
                         dbc.Card([
 
+                            dbc.CardBody(
+                                'Datos del 26 de julio al 19 de septiembre del 2021, capturados desde las 5 am hasta las 12 am (19 horas).'
+                            )
+                        ])
+                    ])
+                ]),
+
+                html.Br(),
+
+                dbc.Row([
+
+                    dbc.Col([
+
+                        dbc.Card([
+
                             dbc.CardBody([
 
                                 html.Div([
@@ -177,7 +192,7 @@ def fichatecnica_inicio():
                                                 'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
                                             html.P(
-                                                'El cambio porcentual se obtiene comparando el promedio de la anterior contra el de hace 2 semanas.'
+                                                'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
                                             )
                                         ]),
 
@@ -401,25 +416,6 @@ def fichatecnica_inicio():
                     ], style={'padding':'10px'})
                 ])
             ], width = 9)
-        ]),
-
-        html.Br(),
-
-        dbc.Row([
-
-            dbc.Col([
-
-                dbc.Card([
-
-                    dbc.CardHeader(
-                        'Información Adicional'
-                    ),
-
-                    dbc.CardBody([
-                        'La información proviene de los datos reportados por la cámara vial inteligente ubicada en el cruce de Alfonso Reyes y Las Sendas entre el 26 de julio y el 19 de septiembre.'
-                    ])
-                ])
-            ])
         ])
     ])
 
@@ -508,7 +504,7 @@ mapa_vialibre.update_layout(
     ),
     height = 800,
     hovermode = 'closest',
-    margin = dict(t=0, l=0, r=0, b=0)
+    margin = dict(t=0, l=0, r=0, b=0, pad = 0)
 )
 
 mapa_vialibre.update_traces(
@@ -520,15 +516,16 @@ mapa_vialibre.update_layout(
     legend = dict(
         yanchor = "top",
         y = 0.99,
-        xanchor = "left",
-        x = 0.83,
+        xanchor = "right",
+        x = 0.99,
         font = dict(
             family = 'Helvetica',
             color = 'white'
         ),
         bgcolor = 'rgba(128, 128, 128, 0.4)'
     ),
-    margin = dict(autoexpand = False)
+    margin = dict(autoexpand = False),
+    autosize = True
 )
 
 
