@@ -143,21 +143,6 @@ def fichatecnica_inicio():
 
                         dbc.Card([
 
-                            dbc.CardBody(
-                                'Datos del 26 de julio al 19 de septiembre del 2021, capturados desde las 5 am hasta las 12 am (19 horas).'
-                            )
-                        ])
-                    ])
-                ]),
-
-                html.Br(),
-
-                dbc.Row([
-
-                    dbc.Col([
-
-                        dbc.Card([
-
                             dbc.CardBody([
 
                                 html.Div([
@@ -389,6 +374,22 @@ def fichatecnica_inicio():
                             ])
                         ])
                     ])  
+                ]),
+
+                html.Br(),
+
+                dbc.Row([
+
+                    dbc.Col([
+
+                        dbc.Card([
+
+                            dbc.CardBody(
+                                'Datos del 26 de julio al 19 de septiembre del 2021, capturados desde las 5 am hasta las 12 am (19 horas).',
+                                style = {'fontSize': 13}
+                            )
+                        ])
+                    ])
                 ])
             ]),
 
