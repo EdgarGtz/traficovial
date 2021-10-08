@@ -177,7 +177,7 @@ def fichatecnica_inicio():
                                                 'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
                                             html.P(
-                                                'Se obtiene el cambio porcentual comparando el promedio de la semana pasada contra el de hace 2 semanas.'
+                                                'El cambio porcentual se obtiene comparando el promedio de la semana pasada contra el de hace 2 semanas.'
                                             )
                                         ]),
 
@@ -258,7 +258,7 @@ def fichatecnica_inicio():
                                                 'Promedio de peatones por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
                                             html.P(
-                                                'Se obtiene el cambio porcentual comparando el promedio de la semana pasada contra el de hace 2 semanas.'
+                                                'El cambio porcentual se obtiene comparando el promedio de la semana pasada contra el de hace 2 semanas.'
                                             )
                                         ]),
 
@@ -338,7 +338,7 @@ def fichatecnica_inicio():
                                                 'Velocidad promedio de autos por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
                                             html.P(
-                                                'Se obtiene el cambio porcentual comparando el promedio de la semana pasada contra el de hace 2 semanas.'
+                                                'El cambio porcentual se obtiene comparando el promedio de la semana pasada contra el de hace 2 semanas.'
                                             )
                                         ]),
 
@@ -496,7 +496,7 @@ sendas = px.scatter_mapbox(
 sendas.update_traces(
     hovertemplate = '<b>Alfonso Reyes con Las Sendas</b><br><extra></extra>',
     showlegend = True,
-    name = 'Cámara Vial Inteligente (Detección de Objetos)'
+    name = 'Cámara Vial Inteligente'
 )
 
 mapa_vialibre.add_trace(sendas.data[0])
@@ -521,14 +521,14 @@ mapa_vialibre.update_layout(
         yanchor = "top",
         y = 0.99,
         xanchor = "left",
-        x = 0.01,
+        x = 0.83,
         font = dict(
             family = 'Helvetica',
-            color = 'black'
+            color = 'white'#'rgba(0, 0, 0, 0.6)'
         ),
-        bgcolor = 'LightSteelBlue',
-        bordercolor = 'black',
-        borderwidth = 1
+        bgcolor = 'rgba(128, 128, 128, 0.4)'#,
+        # bordercolor = 'black',
+        # borderwidth = 1
     )
 )
 
