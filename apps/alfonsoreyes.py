@@ -177,7 +177,7 @@ def fichatecnica_inicio():
                                                 'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
                                             html.P(
-                                                'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
+                                                'Se obtiene el cambio porcentual comparando el promedio de la semana pasada contra el de hace 2 semanas.'
                                             )
                                         ]),
 
@@ -258,7 +258,7 @@ def fichatecnica_inicio():
                                                 'Promedio de peatones por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
                                             html.P(
-                                                'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
+                                                'Se obtiene el cambio porcentual comparando el promedio de la semana pasada contra el de hace 2 semanas.'
                                             )
                                         ]),
 
@@ -338,7 +338,7 @@ def fichatecnica_inicio():
                                                 'Velocidad promedio de autos por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
                                             html.P(
-                                                'Cambio Porcentual: Comparación entre el promedio de la semana pasada vs hace 2 semanas.'
+                                                'Se obtiene el cambio porcentual comparando el promedio de la semana pasada contra el de hace 2 semanas.'
                                             )
                                         ]),
 
@@ -481,10 +481,22 @@ mapa_vialibre = go.Figure(
     )
 )
 
+mapa_vialibre.update_traces(
+    hovertemplate = '<b>Vía Libre (Fase 1)</b><br><extra></extra>',
+    showlegend = True,
+    name = 'Vía Libre (Fase 1)'
+)
+
 sendas = px.scatter_mapbox(
     sendas_punto,
     lat = sendas_punto.geometry.y,
     lon = sendas_punto.geometry.x
+)
+
+sendas.update_traces(
+    hovertemplate = '<b>Alfonso Reyes con Las Sendas</b><br><extra></extra>',
+    showlegend = True,
+    name = 'Cámara Vial Inteligente (Detección de Objetos)'
 )
 
 mapa_vialibre.add_trace(sendas.data[0])
@@ -500,9 +512,26 @@ mapa_vialibre.update_layout(
 )
 
 mapa_vialibre.update_traces(
-     marker_color="#c6cc14",
-     marker_size = 20
- )
+    marker_color="#c6cc14",
+    marker_size = 20
+)
+
+mapa_vialibre.update_layout(
+    legend = dict(
+        yanchor = "top",
+        y = 0.99,
+        xanchor = "left",
+        x = 0.01,
+        font = dict(
+            family = 'Helvetica',
+            color = 'black'
+        ),
+        bgcolor = 'LightSteelBlue',
+        bordercolor = 'black',
+        borderwidth = 1
+    )
+)
+
 
 
 
