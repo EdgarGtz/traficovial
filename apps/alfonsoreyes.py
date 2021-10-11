@@ -131,6 +131,8 @@ def render_alfonsoreyes(tab):
     #elif tab == 'alfonsoreyes_1':
     #    return alfonsoreyes_1()
 
+#----------------------------------------------------------
+
 # FOTOS
 img2 = 'assets/informacion.png' # replace with your own image
 encoded_img2 = base64.b64encode(open(img2, 'rb').read()).decode('ascii')
@@ -162,7 +164,7 @@ def fichatecnica_inicio():
                                             html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
                                                         style={'float':'right'},
                                                         className="p-0 img-fluid"), 
-                                                id="open1_sev", 
+                                                id="open1_bici", 
                                                 n_clicks=0, 
                                                 style={'display':'inline-block',
                                                         'float':'left','padding':'0', 
@@ -170,11 +172,11 @@ def fichatecnica_inicio():
                                                         'border-color':'transparent','padding-top':'5px'},
                                                 className='rounded-circle'
                                         ),  
-                                    ], id = 'tooltip-target-sev'),
+                                    ], id = 'tooltip-target-bici'),
 
                                     dbc.Tooltip(
                                         'Más información',
-                                        target = 'tooltip-target-sev'
+                                        target = 'tooltip-target-bici'
                                     ),
 
                                     dbc.Modal([
@@ -193,13 +195,13 @@ def fichatecnica_inicio():
                                         dbc.ModalFooter([
                                             dbc.Button(
                                                 "Cerrar", 
-                                                id="close1_sev", 
+                                                id="close1_bici", 
                                                 className="ml-auto btn btn-secondary", 
                                                 n_clicks=0
                                             )
                                         ])
                                     ],
-                                    id="modal_sev",
+                                    id="modal_bici",
                                     centered=True,
                                     size="lg",
                                     is_open=False),
@@ -429,11 +431,16 @@ def fichatecnica_inicio():
         ])
     ])
 
+#----------------------------------------------------------
 
-def toggle_modal_sev(open1_sev, close1_sev, modal_sev):
-    if open1_sev or close1_sev:
-        return not modal_sev
-    return modal_sev
+## Figuras Ficha Técnica - Inicio
+
+# MODALS PARA TARJETAS DE INDICADORES
+
+def toggle_modal_bici(open1_bici, close1_bici, modal_bici):
+    if open1_bici or close1_bici:
+        return not modal_bici
+    return modal_bici
 
 def toggle_modal_peatones(open1_peatones, close1_peatones, modal_peatones):
     if open1_peatones or close1_peatones:
@@ -514,7 +521,7 @@ mapa_vialibre.update_layout(
     ),
     height = 800,
     hovermode = 'closest',
-    margin = dict(t=0, l=0, r=0, b=0, pad = 0)
+    margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
 )
 
 mapa_vialibre.update_traces(
@@ -538,62 +545,6 @@ mapa_vialibre.update_layout(
     autosize = True
 )
 
-#----------------------------------------------------------
-
-## Figuras Ficha Técnica - Inicio
-
-# Indicador de Bicicletas por Día Entre Semana
-bicidia_indic_entre = go.Figure(go.Indicator(
-    mode = "number",
-    value = 286,
-    domain = {'x': [0, 1], 'y': [0, 1]},
-    title = {"text": "Promedio"}
-))
-
-bicidia_indic_entre.update_layout(
-     width = 375,
-     height = 250)
-
-bicidia_indic_entre.update_traces(selector = dict(type = 'indicator'))
-
-# Indicador de Bicicletas por Día Fin de Semana
-bicidia_indic_fin = go.Figure(go.Indicator(
-    mode = "number",
-    value = 567,
-    domain = {'x': [0, 1], 'y': [0, 1]},
-    title = {"text": "Promedio"}
-))
-
-bicidia_indic_fin.update_layout(
-     margin = dict(t=0, l=0, r=0, b=0))
-
-bicidia_indic_fin.update_traces(selector=dict(type='indicator'))
-
-# Indicador de Bicicletas por Hora Entre Semana
-bicihora_indic_entre = go.Figure(go.Indicator(
-    mode = "number",
-    value = 15,
-    domain = {'x': [0, 1], 'y': [0, 1]},
-    title = {"text": "Promedio<br><span style='font-size:0.8em;color:gray'>"}
-))
-
-bicihora_indic_entre.update_layout(
-     margin = dict(t=0, l=0, r=0, b=0))
-
-bicihora_indic_entre.update_traces(selector=dict(type='indicator'))
-
-# Indicador de Bicicletas por Hora Fin de Semana
-bicihora_indic_fin = go.Figure(go.Indicator(
-    mode = "number",
-    value = 30,
-    domain = {'x': [0, 1], 'y': [0, 1]},
-    title = {"text": "Promedio<br><span style='font-size:0.8em;color:gray'>"}
-))
-
-bicihora_indic_fin.update_layout(
-     margin = dict(t=0, l=0, r=0, b=0))
-
-bicihora_indic_fin.update_traces(selector=dict(type='indicator'))
 
 #----------------------------------------------------------
 
@@ -618,7 +569,7 @@ def fichatecnica_bicicletas():
                                             html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
                                                         style={'float':'right'},
                                                         className="p-0 img-fluid"), 
-                                                id="open1_sev", 
+                                                id="open1_bicisemana", 
                                                 n_clicks=0, 
                                                 style={'display':'inline-block',
                                                         'float':'left','padding':'0', 
@@ -626,36 +577,36 @@ def fichatecnica_bicicletas():
                                                         'border-color':'transparent','padding-top':'5px'},
                                                 className='rounded-circle'
                                         ),  
-                                    ], id = 'tooltip-target-sev'),
+                                    ], id = 'tooltip-target-bicisemana'),
 
                                     dbc.Tooltip(
                                         'Más información',
-                                        target = 'tooltip-target-sev'
+                                        target = 'tooltip-target-bicisemana'
                                     ),
 
                                     dbc.Modal([
 
-                                        dbc.ModalHeader(html.B('Bicicletas por Día')),
+                                        dbc.ModalHeader(html.B('Bicicletas por Semana')),
 
                                         dbc.ModalBody([
                                             html.P(
-                                                'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
+                                                'Conteo de bicicletas de la semana anterior.'
                                             ),
-                                            html.P(
-                                                'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
-                                            )
+                                            # html.P(
+                                            #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+                                            # )
                                         ]),
 
                                         dbc.ModalFooter([
                                             dbc.Button(
                                                 "Cerrar", 
-                                                id="close1_sev", 
+                                                id="close1_bicisemana", 
                                                 className="ml-auto btn btn-secondary", 
                                                 n_clicks=0
                                             )
                                         ])
                                     ],
-                                    id="modal_sev",
+                                    id="modal_bicisemana",
                                     centered=True,
                                     size="lg",
                                     is_open=False),
@@ -694,7 +645,7 @@ def fichatecnica_bicicletas():
                                             html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
                                                         style={'float':'right'},
                                                         className="p-0 img-fluid"), 
-                                                id="open1_sev", 
+                                                id="open1_bicidia", 
                                                 n_clicks=0, 
                                                 style={'display':'inline-block',
                                                         'float':'left','padding':'0', 
@@ -702,11 +653,11 @@ def fichatecnica_bicicletas():
                                                         'border-color':'transparent','padding-top':'5px'},
                                                 className='rounded-circle'
                                         ),  
-                                    ], id = 'tooltip-target-sev'),
+                                    ], id = 'tooltip-target-bicidia'),
 
                                     dbc.Tooltip(
                                         'Más información',
-                                        target = 'tooltip-target-sev'
+                                        target = 'tooltip-target-bicidia'
                                     ),
 
                                     dbc.Modal([
@@ -717,21 +668,21 @@ def fichatecnica_bicicletas():
                                             html.P(
                                                 'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
                                             ),
-                                            html.P(
-                                                'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
-                                            )
+                                            # html.P(
+                                            #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+                                            # )
                                         ]),
 
                                         dbc.ModalFooter([
                                             dbc.Button(
                                                 "Cerrar", 
-                                                id="close1_sev", 
+                                                id="close1_bicidia", 
                                                 className="ml-auto btn btn-secondary", 
                                                 n_clicks=0
                                             )
                                         ])
                                     ],
-                                    id="modal_sev",
+                                    id="modal_bicidia",
                                     centered=True,
                                     size="lg",
                                     is_open=False),
@@ -770,7 +721,7 @@ def fichatecnica_bicicletas():
                                             html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
                                                         style={'float':'right'},
                                                         className="p-0 img-fluid"), 
-                                                id="open1_sev", 
+                                                id="open1_bicihora", 
                                                 n_clicks=0, 
                                                 style={'display':'inline-block',
                                                         'float':'left','padding':'0', 
@@ -778,11 +729,11 @@ def fichatecnica_bicicletas():
                                                         'border-color':'transparent','padding-top':'5px'},
                                                 className='rounded-circle'
                                         ),  
-                                    ], id = 'tooltip-target-sev'),
+                                    ], id = 'tooltip-target-bicihora'),
 
                                     dbc.Tooltip(
                                         'Más información',
-                                        target = 'tooltip-target-sev'
+                                        target = 'tooltip-target-bicihora'
                                     ),
 
                                     dbc.Modal([
@@ -791,23 +742,23 @@ def fichatecnica_bicicletas():
 
                                         dbc.ModalBody([
                                             html.P(
-                                                'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
+                                                'Promedio de bicicletas por hora tomado de la semana anterior (Lunes a Domingo).'
                                             ),
-                                            html.P(
-                                                'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
-                                            )
+                                            # html.P(
+                                            #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+                                            # )
                                         ]),
 
                                         dbc.ModalFooter([
                                             dbc.Button(
                                                 "Cerrar", 
-                                                id="close1_sev", 
+                                                id="close1_bicihora", 
                                                 className="ml-auto btn btn-secondary", 
                                                 n_clicks=0
                                             )
                                         ])
                                     ],
-                                    id="modal_sev",
+                                    id="modal_bicihora",
                                     centered=True,
                                     size="lg",
                                     is_open=False),
@@ -896,7 +847,7 @@ def fichatecnica_bicicletas():
 
         dbc.Row([
             
-           dbc.Col([
+            dbc.Col([
 
                 dbc.Card([
 
@@ -951,6 +902,26 @@ def fichatecnica_bicicletas():
             ]) 
         ])
     ])
+
+#----------------------------------------------------------
+
+# MODALS PARA TARJETAS DE INDICADORES
+
+def toggle_modal_bicisemana(open1_bicisemana, close1_bicisemana, modal_bicisemana):
+    if open1_bicisemana or close1_bicisemana:
+        return not modal_bicisemana
+    return modal_bicisemana
+
+def toggle_modal_bicidia(open1_bicidia, close1_bicidia, modal_bicidia):
+    if open1_bicidia or close1_bicidia:
+        return not modal_bicidia
+    return modal_bicidia
+
+
+def toggle_modal_bicihora(open1_bicihora, close1_bicihora, modal_bicihora):
+    if open1_bicihora or close1_bicihora:
+        return not modal_bicihora
+    return modal_bicihora
 
 #----------------------------------------------------------
 
@@ -1337,10 +1308,10 @@ ficha_alfonso = ficha_alfonso[ficha_alfonso['dia_semana'] != 'sábado']
 ficha_alfonso = ficha_alfonso[ficha_alfonso['dia_semana'] != 'domingo']
 
 # Datos de conteo semanales
-semana_alfonso = ficha_alfonso.drop(['mes', 'hora', 'dia_semana', 'fecha'], axis = 1)
-semana_alfonso = semana_alfonso.loc[:, ~semana_alfonso.columns.str.contains("avg")]
-semana_alfonso = semana_alfonso.groupby('semana', as_index = False).sum()
-semana_alfonso['motorizados'] = semana_alfonso['motorcycle'] + semana_alfonso['autos'] + semana_alfonso['bus']
+# semana_alfonso = ficha_alfonso.drop(['mes', 'hora', 'dia_semana', 'fecha'], axis = 1)
+# semana_alfonso = semana_alfonso.loc[:, ~semana_alfonso.columns.str.contains("avg")]
+# semana_alfonso = semana_alfonso.groupby('semana', as_index = False).sum()
+# semana_alfonso['motorizados'] = semana_alfonso['motorcycle'] + semana_alfonso['autos'] + semana_alfonso['bus']
 
 # Datos de conteo por día de la semana
 diasemana_alfonso = ficha_alfonso.drop(['mes', 'semana', 'dia_semana', 'hora'], axis = 1)
@@ -1361,6 +1332,34 @@ dias_alfonso = dias_alfonso.groupby('fecha', as_index = False).sum()
 dias_alfonso['dia_semana'] = dias_alfonso['fecha'].dt.day_name()
 dias_alfonso['motorizados'] = dias_alfonso['motorcycle'] + dias_alfonso['autos'] + dias_alfonso['bus']
 
+# Datos de conteo semanales
+semana_alfonso = ficha_alfonso.drop(['mes', 'semana', 'dia_semana', 'hora'], axis = 1)
+semana_alfonso = semana_alfonso.loc[:, ~semana_alfonso.columns.str.contains("avg")]
+semana_alfonso['fecha'] = pd.to_datetime(semana_alfonso['fecha'], dayfirst = True)
+semana_alfonso = semana_alfonso.groupby('fecha', as_index = False).sum()
+semana_alfonso['motorizados'] = semana_alfonso['motorcycle'] + semana_alfonso['autos'] + semana_alfonso['bus']
+
+semana_alfonso['semana'] = semana_alfonso['fecha'].dt.isocalendar().week + 1
+semana_alfonso = semana_alfonso.groupby(['semana', 'fecha'], as_index = False).sum()
+
+df_fechas = semana_alfonso['fecha']
+df_fechas = df_fechas.dt.strftime('%m-%d')
+
+semana_alfonso = semana_alfonso.drop('fecha', axis = 1)
+semana_alfonso = semana_alfonso.groupby('semana', as_index = False).sum()
+
+fecha_inicio = df_fechas.iloc[::5]
+fecha_fin = df_fechas.iloc[4::5]
+fecha_inicio = fecha_inicio.reset_index()
+fecha_fin = fecha_fin.reset_index()
+fecha_inicio = fecha_inicio.drop('index', axis = 1)
+fecha_fin = fecha_fin.drop('index', axis = 1)
+
+semana_alfonso['fecha_inicio'] = fecha_inicio['fecha']
+semana_alfonso['fecha_fin'] = fecha_fin['fecha']
+semana_alfonso['semana_fecha'] = semana_alfonso['fecha_inicio'].astype(str) + ' - ' + semana_alfonso['fecha_fin'].astype(str)
+semana_alfonso = semana_alfonso.drop(['semana', 'fecha_inicio', 'fecha_fin'], axis = 1)
+
 # Datos de conteo promedio por hora del día
 dias_promedio = ficha_alfonso.drop(['mes', 'semana', 'dia_semana', 'fecha'], axis = 1)
 dias_promedio = dias_promedio.loc[:, ~dias_promedio.columns.str.contains("avg")]
@@ -1370,7 +1369,7 @@ dias_promedio['motorizados'] = dias_promedio['motorcycle'] + dias_promedio['auto
 ### GRÁFICAS BICICLETAS
 
 # Gráfica de Conteo por Semana de Bicicletas
-bici_semana = px.line(semana_alfonso, x = 'semana', y = 'bicycle', 
+bici_semana = px.line(semana_alfonso, x = 'semana_fecha', y = 'bicycle', 
                       labels = {'fecha': 'Fecha',
                                 'bicycle': 'Bicicletas'},
                       template = 'plotly_white')
@@ -1385,7 +1384,9 @@ bici_semana.update_yaxes(title_text = '')
 
 bici_semana.update_layout(hoverlabel = dict(font_size = 16),
                           hoverlabel_align = 'right',
-                          hovermode = 'x unified')
+                          hovermode = 'x unified',
+                          margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                        )
 
 # Gráfica de Conteo por Día de la Semana de Bicicletas
 bici_diasemana = px.line(diasemana_alfonso, x = 'dia_semana', y = 'bicycle',
@@ -1404,7 +1405,9 @@ bici_diasemana.update_yaxes(title_text = '')
 
 bici_diasemana.update_layout(hoverlabel = dict(font_size = 16),
                              hoverlabel_align = 'right',
-                             hovermode = 'x unified')
+                             hovermode = 'x unified',
+                             margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                            )
 
 # Gráfica de Conteo por Día de Bicicletas
 bici_dia = px.line(dias_alfonso, x = 'fecha', y = 'bicycle',
@@ -1423,7 +1426,9 @@ bici_dia.update_yaxes(title_text = '')
 
 bici_dia.update_layout(hoverlabel = dict(font_size = 16),
                        hoverlabel_align = 'right',
-                       hovermode = 'x unified')
+                       hovermode = 'x unified',
+                       margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                       )
 
 #Gráfica de Conteo Promedio por Hora de Bicicletas
 bici_hora = px.line(dias_promedio, x = 'hora', y = 'bicycle',
@@ -1442,12 +1447,14 @@ bici_hora.update_yaxes(title_text = '')
 
 bici_hora.update_layout(hoverlabel = dict(font_size = 16),
                         hoverlabel_align = 'right',
-                        hovermode = 'x unified')
+                        hovermode = 'x unified',
+                        margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                        )
 
 ## GRÁFICAS PEATONES
 
 #Gráfica de Conteo por Semana de Peatones
-peatones_semana = px.line(semana_alfonso, x = 'semana', y = 'peatones',
+peatones_semana = px.line(semana_alfonso, x = 'semana_fecha', y = 'peatones',
                             labels = {'fecha': 'Fecha', 
                                       'peatones': 'Peatones'},
                             template = 'plotly_white')
@@ -1526,7 +1533,7 @@ peatones_hora.update_layout(hoverlabel = dict(font_size = 16),
 ## GRÁFICAS VEHÍCULOS MOTORIZADOS
 
 # Gráfica de Conteo por Semana de Motorizados
-motorizados_semana = px.line(semana_alfonso, x = 'semana', y = 'motorizados',
+motorizados_semana = px.line(semana_alfonso, x = 'semana_fecha', y = 'motorizados',
                             labels = {'fecha': 'Fecha', 
                                     'motorizados': 'Vehículos Motorizados'},
                             template = 'plotly_white')
@@ -1736,7 +1743,9 @@ vel_autos.update_xaxes(showgrid = False, showline = True,
 vel_autos.update_yaxes(title_text = '')
 
 vel_autos.update_layout(hoverlabel = dict(font_size = 16),
-                 hoverlabel_align = 'right', hovermode = 'x unified')
+                 hoverlabel_align = 'right', hovermode = 'x unified',
+                 margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                 )
 
 #----------------------------------------------------------
 
@@ -1868,7 +1877,9 @@ bar_reparto = px.bar(reparto_modal.T, template = 'plotly_white')
 bar_reparto.update_layout(xaxis={'categoryorder':'total descending'},
                           showlegend = False,
                           uniformtext_minsize = 8,
-                          uniformtext_mode = 'hide')
+                          uniformtext_mode = 'hide',
+                          margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                          )
 
 bar_reparto.update_xaxes(showgrid = False,
                          showline = True, 
@@ -1896,6 +1907,10 @@ genero_peatones['cuenta'] = genero
 
 # Gráfica de Género de Peatones
 pie_peatones = px.pie(genero_peatones, values = 'cuenta', names = 'genero')
+
+pie_peatones.update_layout(
+    margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+)
 
 #----------------------------------------------------------
 
@@ -2190,7 +2205,9 @@ hv_totales.update_yaxes(title_text = '')
 
 hv_totales.update_layout(hoverlabel = dict(font_size = 16),
                           hoverlabel_align = 'right',
-                          hovermode = 'x unified')
+                          hovermode = 'x unified',
+                          margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                        )
 
 # Tabla de Tipos de Hechos Viales en Vía Libre
 hv_tipos = pd.DataFrame(
@@ -2264,7 +2281,9 @@ hv_top10_2 = px.bar(hv_intersecciones2, x = "hechos_viales", y = "interseccion",
 hv_top10_2.update_layout(yaxis={'categoryorder':'total ascending'},
                           showlegend = False,
                           uniformtext_minsize = 8,
-                          uniformtext_mode = 'hide')
+                          uniformtext_mode = 'hide',
+                          margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                        )
 
 hv_top10_2.update_xaxes(showgrid = True,
                          showline = True, 
