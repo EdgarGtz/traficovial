@@ -71,15 +71,15 @@ def alfonsoreyes():
                                 tab_id = 'fichatecnica_motorizados',
                                 disabled = False
                             ),
-                            
-                            # Gráficas de Velocidad Promedio
-                            dbc.Tab(label = 'Velocidad',
-                                    tab_id = 'fichatecnica_vel',
-                                    disabled = False),
-
+                                                        
                             # Gráficas de Reparto Modal
                             dbc.Tab(label = 'Reparto Modal',
                                     tab_id = 'fichatecnica_reparto',
+                                    disabled = False),
+
+                            # Gráficas de Velocidad Promedio
+                            dbc.Tab(label = 'Velocidad',
+                                    tab_id = 'fichatecnica_vel',
                                     disabled = False),
 
                             # Hechos Viales
