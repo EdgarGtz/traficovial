@@ -3,6 +3,7 @@ import dash
 from dash_bootstrap_components._components.Card import Card
 from dash_bootstrap_components._components.CardBody import CardBody
 from dash_bootstrap_components._components.Row import Row
+from dash_bootstrap_components._components.Tab import Tab
 import dash_core_components as dcc
 from dash_core_components.Graph import Graph
 import dash_html_components as html
@@ -57,10 +58,19 @@ def alfonsoreyes():
                                 disabled = False
                             ),
 
-                            # Gráficas de Conteo
-                            dbc.Tab(label = 'Conteo',
-                                    tab_id = 'fichatecnica_conteo',
-                                    disabled = False),
+                            # Datos Peatones
+                            dbc.Tab(
+                                label = 'Peatones',
+                                tab_id = 'fichatecnica_peatones',
+                                disabled = False
+                            ),
+
+                            # Datos Vehículos Motorizados
+                            dbc.Tab(
+                                label = 'Vehículos Motorizados',
+                                tab_id = 'fichatecnica_motorizados',
+                                disabled = False
+                            ),
                             
                             # Gráficas de Velocidad Promedio
                             dbc.Tab(label = 'Velocidad',
@@ -120,8 +130,10 @@ def render_alfonsoreyes(tab):
         return fichatecnica_inicio()
     elif tab == 'fichatecnica_bicicletas':
         return fichatecnica_bicicletas()
-    elif tab == 'fichatecnica_conteo':
-        return fichatecnica_conteo()
+    elif tab == 'fichatecnica_peatones':
+        return fichatecnica_peatones()
+    elif tab == 'fichatecnica_motorizados':
+        return fichatecnica_motorizados()
     elif tab == 'fichatecnica_vel':
         return fichatecnica_vel()
     elif tab == 'fichatecnica_reparto':
@@ -553,238 +565,238 @@ mapa_vialibre.update_layout(
 def fichatecnica_bicicletas():
     return html.Div([
 
-        dbc.Row([
+        # dbc.Row([
 
-            dbc.Col([
+        #     dbc.Col([
                 
-                dbc.Card([
+        #         dbc.Card([
 
-                    dbc.CardBody([
+        #             dbc.CardBody([
 
-                        html.Div([
+        #                 html.Div([
 
-                                    html.Span([
+        #                             html.Span([
                                         
-                                        dbc.Button(
-                                            html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
-                                                        style={'float':'right'},
-                                                        className="p-0 img-fluid"), 
-                                                id="open1_bicisemana", 
-                                                n_clicks=0, 
-                                                style={'display':'inline-block',
-                                                        'float':'left','padding':'0', 
-                                                        'width':'15px','background-color':'transparent',
-                                                        'border-color':'transparent','padding-top':'5px'},
-                                                className='rounded-circle'
-                                        ),  
-                                    ], id = 'tooltip-target-bicisemana'),
+        #                                 dbc.Button(
+        #                                     html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+        #                                                 style={'float':'right'},
+        #                                                 className="p-0 img-fluid"), 
+        #                                         id="open1_bicisemana", 
+        #                                         n_clicks=0, 
+        #                                         style={'display':'inline-block',
+        #                                                 'float':'left','padding':'0', 
+        #                                                 'width':'15px','background-color':'transparent',
+        #                                                 'border-color':'transparent','padding-top':'5px'},
+        #                                         className='rounded-circle'
+        #                                 ),  
+        #                             ], id = 'tooltip-target-bicisemana'),
 
-                                    dbc.Tooltip(
-                                        'Más información',
-                                        target = 'tooltip-target-bicisemana'
-                                    ),
+        #                             dbc.Tooltip(
+        #                                 'Más información',
+        #                                 target = 'tooltip-target-bicisemana'
+        #                             ),
 
-                                    dbc.Modal([
+        #                             dbc.Modal([
 
-                                        dbc.ModalHeader(html.B('Bicicletas por Semana')),
+        #                                 dbc.ModalHeader(html.B('Bicicletas por Semana')),
 
-                                        dbc.ModalBody([
-                                            html.P(
-                                                'Conteo de bicicletas de la semana anterior.'
-                                            ),
-                                            # html.P(
-                                            #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
-                                            # )
-                                        ]),
+        #                                 dbc.ModalBody([
+        #                                     html.P(
+        #                                         'Conteo de bicicletas de la semana anterior.'
+        #                                     ),
+        #                                     # html.P(
+        #                                     #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+        #                                     # )
+        #                                 ]),
 
-                                        dbc.ModalFooter([
-                                            dbc.Button(
-                                                "Cerrar", 
-                                                id="close1_bicisemana", 
-                                                className="ml-auto btn btn-secondary", 
-                                                n_clicks=0
-                                            )
-                                        ])
-                                    ],
-                                    id="modal_bicisemana",
-                                    centered=True,
-                                    size="lg",
-                                    is_open=False),
+        #                                 dbc.ModalFooter([
+        #                                     dbc.Button(
+        #                                         "Cerrar", 
+        #                                         id="close1_bicisemana", 
+        #                                         className="ml-auto btn btn-secondary", 
+        #                                         n_clicks=0
+        #                                     )
+        #                                 ])
+        #                             ],
+        #                             id="modal_bicisemana",
+        #                             centered=True,
+        #                             size="lg",
+        #                             is_open=False),
 
-                                    html.P(
-                                        'Conteo Semanal', style={'width':'90%','float':'left'}, className='pl-1'
-                                    )
-                        ]),
+        #                             html.P(
+        #                                 'Conteo Semanal', style={'width':'90%','float':'left'}, className='pl-1'
+        #                             )
+        #                 ]),
 
-                        html.Div([
-                                    html.H1(str(int(semana_alfonso['bicycle'].iloc[-1:])),
-                                    style = {'float': 'left'}
-                                    )#,
-                                    # html.H6(
-                                    # '+' + str(int((((semana_alfonso['bicycle'].iloc[-1:].sum() / semana_alfonso['bicycle'].iloc[-2:-1]).sum() - 1) * 100).round())) + '%',
-                                    # style = {'color': 'green',
-                                    #         'float': 'left'},
-                                    # className = 'pt-4 pl-2'
-                                    # )
-                        ])
-                    ])
-                ])
-            ]),
+        #                 html.Div([
+        #                             html.H1(str(int(semana_alfonso['bicycle'].iloc[-1:])),
+        #                             style = {'float': 'left'}
+        #                             )#,
+        #                             # html.H6(
+        #                             # '+' + str(int((((semana_alfonso['bicycle'].iloc[-1:].sum() / semana_alfonso['bicycle'].iloc[-2:-1]).sum() - 1) * 100).round())) + '%',
+        #                             # style = {'color': 'green',
+        #                             #         'float': 'left'},
+        #                             # className = 'pt-4 pl-2'
+        #                             # )
+        #                 ])
+        #             ])
+        #         ])
+        #     ]),
 
-            dbc.Col([
+        #     dbc.Col([
 
-                dbc.Card([
+        #         dbc.Card([
 
-                    dbc.CardBody([
+        #             dbc.CardBody([
 
-                        html.Div([
+        #                 html.Div([
 
-                                    html.Span([
+        #                             html.Span([
                                         
-                                        dbc.Button(
-                                            html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
-                                                        style={'float':'right'},
-                                                        className="p-0 img-fluid"), 
-                                                id="open1_bicidia", 
-                                                n_clicks=0, 
-                                                style={'display':'inline-block',
-                                                        'float':'left','padding':'0', 
-                                                        'width':'15px','background-color':'transparent',
-                                                        'border-color':'transparent','padding-top':'5px'},
-                                                className='rounded-circle'
-                                        ),  
-                                    ], id = 'tooltip-target-bicidia'),
+        #                                 dbc.Button(
+        #                                     html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+        #                                                 style={'float':'right'},
+        #                                                 className="p-0 img-fluid"), 
+        #                                         id="open1_bicidia", 
+        #                                         n_clicks=0, 
+        #                                         style={'display':'inline-block',
+        #                                                 'float':'left','padding':'0', 
+        #                                                 'width':'15px','background-color':'transparent',
+        #                                                 'border-color':'transparent','padding-top':'5px'},
+        #                                         className='rounded-circle'
+        #                                 ),  
+        #                             ], id = 'tooltip-target-bicidia'),
 
-                                    dbc.Tooltip(
-                                        'Más información',
-                                        target = 'tooltip-target-bicidia'
-                                    ),
+        #                             dbc.Tooltip(
+        #                                 'Más información',
+        #                                 target = 'tooltip-target-bicidia'
+        #                             ),
 
-                                    dbc.Modal([
+        #                             dbc.Modal([
 
-                                        dbc.ModalHeader(html.B('Bicicletas por Día')),
+        #                                 dbc.ModalHeader(html.B('Bicicletas por Día')),
 
-                                        dbc.ModalBody([
-                                            html.P(
-                                                'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
-                                            ),
-                                            # html.P(
-                                            #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
-                                            # )
-                                        ]),
+        #                                 dbc.ModalBody([
+        #                                     html.P(
+        #                                         'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
+        #                                     ),
+        #                                     # html.P(
+        #                                     #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+        #                                     # )
+        #                                 ]),
 
-                                        dbc.ModalFooter([
-                                            dbc.Button(
-                                                "Cerrar", 
-                                                id="close1_bicidia", 
-                                                className="ml-auto btn btn-secondary", 
-                                                n_clicks=0
-                                            )
-                                        ])
-                                    ],
-                                    id="modal_bicidia",
-                                    centered=True,
-                                    size="lg",
-                                    is_open=False),
+        #                                 dbc.ModalFooter([
+        #                                     dbc.Button(
+        #                                         "Cerrar", 
+        #                                         id="close1_bicidia", 
+        #                                         className="ml-auto btn btn-secondary", 
+        #                                         n_clicks=0
+        #                                     )
+        #                                 ])
+        #                             ],
+        #                             id="modal_bicidia",
+        #                             centered=True,
+        #                             size="lg",
+        #                             is_open=False),
 
-                                    html.P(
-                                        ' Bicicletas por Día', style={'width':'90%','float':'left'}, className='pl-1'
-                                    )
-                        ]),
+        #                             html.P(
+        #                                 ' Bicicletas por Día', style={'width':'90%','float':'left'}, className='pl-1'
+        #                             )
+        #                 ]),
 
-                        html.Div([
-                                    html.H1(str(int(dias_alfonso['bicycle'].iloc[-5:].mean().round())),
-                                    style = {'float': 'left'}
-                                    )#,
-                                    # html.H6(
-                                    # '+' + str(int((((dias_alfonso['bicycle'].iloc[-5:].mean() / dias_alfonso['bicycle'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%',
-                                    # style = {'color': 'green',
-                                    #         'float': 'left'},
-                                    # className = 'pt-4 pl-2'
-                                    # )
-                        ])
-                    ])
-                ])
-            ]),
+        #                 html.Div([
+        #                             html.H1(str(int(dias_alfonso['bicycle'].iloc[-5:].mean().round())),
+        #                             style = {'float': 'left'}
+        #                             )#,
+        #                             # html.H6(
+        #                             # '+' + str(int((((dias_alfonso['bicycle'].iloc[-5:].mean() / dias_alfonso['bicycle'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%',
+        #                             # style = {'color': 'green',
+        #                             #         'float': 'left'},
+        #                             # className = 'pt-4 pl-2'
+        #                             # )
+        #                 ])
+        #             ])
+        #         ])
+        #     ]),
 
-            dbc.Col([
+        #     dbc.Col([
 
-                dbc.Card([
+        #         dbc.Card([
 
-                    dbc.CardBody([
+        #             dbc.CardBody([
 
-                        html.Div([
+        #                 html.Div([
 
-                                    html.Span([
+        #                             html.Span([
                                         
-                                        dbc.Button(
-                                            html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
-                                                        style={'float':'right'},
-                                                        className="p-0 img-fluid"), 
-                                                id="open1_bicihora", 
-                                                n_clicks=0, 
-                                                style={'display':'inline-block',
-                                                        'float':'left','padding':'0', 
-                                                        'width':'15px','background-color':'transparent',
-                                                        'border-color':'transparent','padding-top':'5px'},
-                                                className='rounded-circle'
-                                        ),  
-                                    ], id = 'tooltip-target-bicihora'),
+        #                                 dbc.Button(
+        #                                     html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+        #                                                 style={'float':'right'},
+        #                                                 className="p-0 img-fluid"), 
+        #                                         id="open1_bicihora", 
+        #                                         n_clicks=0, 
+        #                                         style={'display':'inline-block',
+        #                                                 'float':'left','padding':'0', 
+        #                                                 'width':'15px','background-color':'transparent',
+        #                                                 'border-color':'transparent','padding-top':'5px'},
+        #                                         className='rounded-circle'
+        #                                 ),  
+        #                             ], id = 'tooltip-target-bicihora'),
 
-                                    dbc.Tooltip(
-                                        'Más información',
-                                        target = 'tooltip-target-bicihora'
-                                    ),
+        #                             dbc.Tooltip(
+        #                                 'Más información',
+        #                                 target = 'tooltip-target-bicihora'
+        #                             ),
 
-                                    dbc.Modal([
+        #                             dbc.Modal([
 
-                                        dbc.ModalHeader(html.B('Bicicletas por Día')),
+        #                                 dbc.ModalHeader(html.B('Bicicletas por Día')),
 
-                                        dbc.ModalBody([
-                                            html.P(
-                                                'Promedio de bicicletas por hora tomado de la semana anterior (Lunes a Domingo).'
-                                            ),
-                                            # html.P(
-                                            #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
-                                            # )
-                                        ]),
+        #                                 dbc.ModalBody([
+        #                                     html.P(
+        #                                         'Promedio de bicicletas por hora tomado de la semana anterior (Lunes a Domingo).'
+        #                                     ),
+        #                                     # html.P(
+        #                                     #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+        #                                     # )
+        #                                 ]),
 
-                                        dbc.ModalFooter([
-                                            dbc.Button(
-                                                "Cerrar", 
-                                                id="close1_bicihora", 
-                                                className="ml-auto btn btn-secondary", 
-                                                n_clicks=0
-                                            )
-                                        ])
-                                    ],
-                                    id="modal_bicihora",
-                                    centered=True,
-                                    size="lg",
-                                    is_open=False),
+        #                                 dbc.ModalFooter([
+        #                                     dbc.Button(
+        #                                         "Cerrar", 
+        #                                         id="close1_bicihora", 
+        #                                         className="ml-auto btn btn-secondary", 
+        #                                         n_clicks=0
+        #                                     )
+        #                                 ])
+        #                             ],
+        #                             id="modal_bicihora",
+        #                             centered=True,
+        #                             size="lg",
+        #                             is_open=False),
 
-                                    html.P(
-                                        ' Bicicletas por Hora', style={'width':'90%','float':'left'}, className='pl-1'
-                                    )
-                        ]),
+        #                             html.P(
+        #                                 ' Bicicletas por Hora', style={'width':'90%','float':'left'}, className='pl-1'
+        #                             )
+        #                 ]),
 
-                        html.Div([
-                                    html.H1(str(int(ficha_alfonso['bicycle'].iloc[-95:].mean().round())),
-                                    style = {'float': 'left'}
-                                     )#,
-                                    # html.H6(
-                                    # '+' + str(int((((ficha_alfonso['bicycle'].iloc[-95:].mean() / ficha_alfonso['bicycle'].iloc[-190:-95].mean()) - 1) * 100).round())) + '%',
-                                    # style = {'color': 'green',
-                                    #         'float': 'left'},
-                                    # className = 'pt-4 pl-2'
-                                    # )
-                        ])
-                    ])
-                ])
-            ])
-        ]),
+        #                 html.Div([
+        #                             html.H1(str(int(ficha_alfonso['bicycle'].iloc[-95:].mean().round())),
+        #                             style = {'float': 'left'}
+        #                              )#,
+        #                             # html.H6(
+        #                             # '+' + str(int((((ficha_alfonso['bicycle'].iloc[-95:].mean() / ficha_alfonso['bicycle'].iloc[-190:-95].mean()) - 1) * 100).round())) + '%',
+        #                             # style = {'color': 'green',
+        #                             #         'float': 'left'},
+        #                             # className = 'pt-4 pl-2'
+        #                             # )
+        #                 ])
+        #             ])
+        #         ])
+        #     ])
+        # ]),
 
-        html.Br(),
+        # html.Br(),
 
         dbc.Row([
 
@@ -801,33 +813,6 @@ def fichatecnica_bicicletas():
                         dcc.Graph(
                             id = 'bici_semana',
                             figure = bici_semana,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False
-                            }
-                        )
-                    ])
-                ])
-            ]),
-
-            dbc.Col([
-                
-                dbc.Card([
-
-                    dbc.CardHeader(
-                        'Bicicletas por Día (Entre Semana)'
-                    ),
-
-                    dbc.CardBody([
-
-                        dcc.Graph(
-                            id = 'bici_dia',
-                            figure = bici_dia,
                             config = {
                                 'modeBarButtonsToRemove':
                                 ['zoom2d', 'lasso2d', 'pan2d',
@@ -923,128 +908,246 @@ def toggle_modal_bicihora(open1_bicihora, close1_bicihora, modal_bicihora):
         return not modal_bicihora
     return modal_bicihora
 
+
 #----------------------------------------------------------
 
-## Layout Ficha Técnica - Conteo
+## Layout Ficha Técnica - Peatones
 
-def fichatecnica_conteo():
+def fichatecnica_peatones():
     return html.Div([
 
-        dbc.Row([
+        # dbc.Row([
 
-            dbc.Col([
+        #     dbc.Col([
+                
+        #         dbc.Card([
 
-                dbc.Card([
+        #             dbc.CardBody([
 
-                    dbc.CardHeader(
-                        'Bicicletas por Semana (Entre Semana)'
-                    ),
+        #                 html.Div([
 
-                    dbc.CardBody([
+        #                             html.Span([
+                                        
+        #                                 dbc.Button(
+        #                                     html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+        #                                                 style={'float':'right'},
+        #                                                 className="p-0 img-fluid"), 
+        #                                         id="open1_bicisemana", 
+        #                                         n_clicks=0, 
+        #                                         style={'display':'inline-block',
+        #                                                 'float':'left','padding':'0', 
+        #                                                 'width':'15px','background-color':'transparent',
+        #                                                 'border-color':'transparent','padding-top':'5px'},
+        #                                         className='rounded-circle'
+        #                                 ),  
+        #                             ], id = 'tooltip-target-bicisemana'),
 
-                        dcc.Graph(
-                            id = 'bici_semana',
-                            figure = bici_semana,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False
-                            }
-                        )
-                    ])
-                ])
-            ]),
+        #                             dbc.Tooltip(
+        #                                 'Más información',
+        #                                 target = 'tooltip-target-bicisemana'
+        #                             ),
 
-            dbc.Col([
-                dbc.Card([
+        #                             dbc.Modal([
 
-                    dbc.CardHeader(
-                        'Bicicletas por Día de la Semana (Entre Semana)'
-                    ),
+        #                                 dbc.ModalHeader(html.B('Bicicletas por Semana')),
 
-                    dbc.CardBody([
+        #                                 dbc.ModalBody([
+        #                                     html.P(
+        #                                         'Conteo de bicicletas de la semana anterior.'
+        #                                     ),
+        #                                     # html.P(
+        #                                     #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+        #                                     # )
+        #                                 ]),
 
-                        dcc.Graph(
-                            id = 'bici_diasemana',
-                            figure = bici_diasemana,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False
-                            }
-                        )
-                    ])
-                ])
-            ])
-        ]),
+        #                                 dbc.ModalFooter([
+        #                                     dbc.Button(
+        #                                         "Cerrar", 
+        #                                         id="close1_bicisemana", 
+        #                                         className="ml-auto btn btn-secondary", 
+        #                                         n_clicks=0
+        #                                     )
+        #                                 ])
+        #                             ],
+        #                             id="modal_bicisemana",
+        #                             centered=True,
+        #                             size="lg",
+        #                             is_open=False),
 
-        html.Br(),
+        #                             html.P(
+        #                                 'Conteo Semanal', style={'width':'90%','float':'left'}, className='pl-1'
+        #                             )
+        #                 ]),
 
-        dbc.Row([
-            
-           dbc.Col([
+        #                 html.Div([
+        #                             html.H1(str(int(semana_alfonso['bicycle'].iloc[-1:])),
+        #                             style = {'float': 'left'}
+        #                             )#,
+        #                             # html.H6(
+        #                             # '+' + str(int((((semana_alfonso['bicycle'].iloc[-1:].sum() / semana_alfonso['bicycle'].iloc[-2:-1]).sum() - 1) * 100).round())) + '%',
+        #                             # style = {'color': 'green',
+        #                             #         'float': 'left'},
+        #                             # className = 'pt-4 pl-2'
+        #                             # )
+        #                 ])
+        #             ])
+        #         ])
+        #     ]),
 
-                dbc.Card([
+        #     dbc.Col([
 
-                    dbc.CardHeader(
-                        'Bicicletas por Día (Entre Semana)'
-                    ),
+        #         dbc.Card([
 
-                    dbc.CardBody([
+        #             dbc.CardBody([
 
-                        dcc.Graph(
-                            id = 'bici_dia',
-                            figure = bici_dia,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False
-                            }
-                        )
-                    ])
-                ])
-            ]),
+        #                 html.Div([
 
-            dbc.Col([
-                dbc.Card([
+        #                             html.Span([
+                                        
+        #                                 dbc.Button(
+        #                                     html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+        #                                                 style={'float':'right'},
+        #                                                 className="p-0 img-fluid"), 
+        #                                         id="open1_bicidia", 
+        #                                         n_clicks=0, 
+        #                                         style={'display':'inline-block',
+        #                                                 'float':'left','padding':'0', 
+        #                                                 'width':'15px','background-color':'transparent',
+        #                                                 'border-color':'transparent','padding-top':'5px'},
+        #                                         className='rounded-circle'
+        #                                 ),  
+        #                             ], id = 'tooltip-target-bicidia'),
 
-                    dbc.CardHeader(
-                        'Bicicletas por Hora (Entre Semana)'
-                    ),
+        #                             dbc.Tooltip(
+        #                                 'Más información',
+        #                                 target = 'tooltip-target-bicidia'
+        #                             ),
 
-                    dbc.CardBody([
+        #                             dbc.Modal([
 
-                        dcc.Graph(
-                            id = 'bici_hora',
-                            figure = bici_hora,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False
-                            }
-                        )
-                    ])
-                ])
-            ]) 
-        ]),
+        #                                 dbc.ModalHeader(html.B('Bicicletas por Día')),
 
-        html.Br(),
+        #                                 dbc.ModalBody([
+        #                                     html.P(
+        #                                         'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
+        #                                     ),
+        #                                     # html.P(
+        #                                     #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+        #                                     # )
+        #                                 ]),
+
+        #                                 dbc.ModalFooter([
+        #                                     dbc.Button(
+        #                                         "Cerrar", 
+        #                                         id="close1_bicidia", 
+        #                                         className="ml-auto btn btn-secondary", 
+        #                                         n_clicks=0
+        #                                     )
+        #                                 ])
+        #                             ],
+        #                             id="modal_bicidia",
+        #                             centered=True,
+        #                             size="lg",
+        #                             is_open=False),
+
+        #                             html.P(
+        #                                 ' Bicicletas por Día', style={'width':'90%','float':'left'}, className='pl-1'
+        #                             )
+        #                 ]),
+
+        #                 html.Div([
+        #                             html.H1(str(int(dias_alfonso['bicycle'].iloc[-5:].mean().round())),
+        #                             style = {'float': 'left'}
+        #                             )#,
+        #                             # html.H6(
+        #                             # '+' + str(int((((dias_alfonso['bicycle'].iloc[-5:].mean() / dias_alfonso['bicycle'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%',
+        #                             # style = {'color': 'green',
+        #                             #         'float': 'left'},
+        #                             # className = 'pt-4 pl-2'
+        #                             # )
+        #                 ])
+        #             ])
+        #         ])
+        #     ]),
+
+        #     dbc.Col([
+
+        #         dbc.Card([
+
+        #             dbc.CardBody([
+
+        #                 html.Div([
+
+        #                             html.Span([
+                                        
+        #                                 dbc.Button(
+        #                                     html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+        #                                                 style={'float':'right'},
+        #                                                 className="p-0 img-fluid"), 
+        #                                         id="open1_bicihora", 
+        #                                         n_clicks=0, 
+        #                                         style={'display':'inline-block',
+        #                                                 'float':'left','padding':'0', 
+        #                                                 'width':'15px','background-color':'transparent',
+        #                                                 'border-color':'transparent','padding-top':'5px'},
+        #                                         className='rounded-circle'
+        #                                 ),  
+        #                             ], id = 'tooltip-target-bicihora'),
+
+        #                             dbc.Tooltip(
+        #                                 'Más información',
+        #                                 target = 'tooltip-target-bicihora'
+        #                             ),
+
+        #                             dbc.Modal([
+
+        #                                 dbc.ModalHeader(html.B('Bicicletas por Día')),
+
+        #                                 dbc.ModalBody([
+        #                                     html.P(
+        #                                         'Promedio de bicicletas por hora tomado de la semana anterior (Lunes a Domingo).'
+        #                                     ),
+        #                                     # html.P(
+        #                                     #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+        #                                     # )
+        #                                 ]),
+
+        #                                 dbc.ModalFooter([
+        #                                     dbc.Button(
+        #                                         "Cerrar", 
+        #                                         id="close1_bicihora", 
+        #                                         className="ml-auto btn btn-secondary", 
+        #                                         n_clicks=0
+        #                                     )
+        #                                 ])
+        #                             ],
+        #                             id="modal_bicihora",
+        #                             centered=True,
+        #                             size="lg",
+        #                             is_open=False),
+
+        #                             html.P(
+        #                                 ' Bicicletas por Hora', style={'width':'90%','float':'left'}, className='pl-1'
+        #                             )
+        #                 ]),
+
+        #                 html.Div([
+        #                             html.H1(str(int(ficha_alfonso['bicycle'].iloc[-95:].mean().round())),
+        #                             style = {'float': 'left'}
+        #                              )#,
+        #                             # html.H6(
+        #                             # '+' + str(int((((ficha_alfonso['bicycle'].iloc[-95:].mean() / ficha_alfonso['bicycle'].iloc[-190:-95].mean()) - 1) * 100).round())) + '%',
+        #                             # style = {'color': 'green',
+        #                             #         'float': 'left'},
+        #                             # className = 'pt-4 pl-2'
+        #                             # )
+        #                 ])
+        #             ])
+        #         ])
+        #     ])
+        # ]),
+
+        # html.Br(),
 
         dbc.Row([
 
@@ -1073,9 +1176,15 @@ def fichatecnica_conteo():
                         )
                     ])
                 ])
-            ]),
+            ])
+        ]),
 
+        html.Br(),
+
+        dbc.Row([
+            
             dbc.Col([
+
                 dbc.Card([
 
                     dbc.CardHeader(
@@ -1099,40 +1208,10 @@ def fichatecnica_conteo():
                         )
                     ])
                 ])
-            ])
-        ]),
-
-        html.Br(),
-
-        dbc.Row([
-            dbc.Col([
-
-                dbc.Card([
-
-                    dbc.CardHeader(
-                        'Peatones por Día (Entre Semana)'
-                    ),
-
-                    dbc.CardBody([
-
-                        dcc.Graph(
-                            id = 'peatones_dia',
-                            figure = peatones_dia,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False
-                            }
-                        )
-                    ])
-                ])
             ]),
 
             dbc.Col([
+
                 dbc.Card([
 
                     dbc.CardHeader(
@@ -1156,10 +1235,250 @@ def fichatecnica_conteo():
                         )
                     ])
                 ])
-            ])
-        ]),
+            ]) 
+        ])
+    ])
 
-        html.Br(),
+
+#----------------------------------------------------------
+
+## Layout Ficha Técnica - Motorizados
+
+def fichatecnica_motorizados():
+    return html.Div([
+
+        # dbc.Row([
+
+        #     dbc.Col([
+                
+        #         dbc.Card([
+
+        #             dbc.CardBody([
+
+        #                 html.Div([
+
+        #                             html.Span([
+                                        
+        #                                 dbc.Button(
+        #                                     html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+        #                                                 style={'float':'right'},
+        #                                                 className="p-0 img-fluid"), 
+        #                                         id="open1_bicisemana", 
+        #                                         n_clicks=0, 
+        #                                         style={'display':'inline-block',
+        #                                                 'float':'left','padding':'0', 
+        #                                                 'width':'15px','background-color':'transparent',
+        #                                                 'border-color':'transparent','padding-top':'5px'},
+        #                                         className='rounded-circle'
+        #                                 ),  
+        #                             ], id = 'tooltip-target-bicisemana'),
+
+        #                             dbc.Tooltip(
+        #                                 'Más información',
+        #                                 target = 'tooltip-target-bicisemana'
+        #                             ),
+
+        #                             dbc.Modal([
+
+        #                                 dbc.ModalHeader(html.B('Bicicletas por Semana')),
+
+        #                                 dbc.ModalBody([
+        #                                     html.P(
+        #                                         'Conteo de bicicletas de la semana anterior.'
+        #                                     ),
+        #                                     # html.P(
+        #                                     #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+        #                                     # )
+        #                                 ]),
+
+        #                                 dbc.ModalFooter([
+        #                                     dbc.Button(
+        #                                         "Cerrar", 
+        #                                         id="close1_bicisemana", 
+        #                                         className="ml-auto btn btn-secondary", 
+        #                                         n_clicks=0
+        #                                     )
+        #                                 ])
+        #                             ],
+        #                             id="modal_bicisemana",
+        #                             centered=True,
+        #                             size="lg",
+        #                             is_open=False),
+
+        #                             html.P(
+        #                                 'Conteo Semanal', style={'width':'90%','float':'left'}, className='pl-1'
+        #                             )
+        #                 ]),
+
+        #                 html.Div([
+        #                             html.H1(str(int(semana_alfonso['bicycle'].iloc[-1:])),
+        #                             style = {'float': 'left'}
+        #                             )#,
+        #                             # html.H6(
+        #                             # '+' + str(int((((semana_alfonso['bicycle'].iloc[-1:].sum() / semana_alfonso['bicycle'].iloc[-2:-1]).sum() - 1) * 100).round())) + '%',
+        #                             # style = {'color': 'green',
+        #                             #         'float': 'left'},
+        #                             # className = 'pt-4 pl-2'
+        #                             # )
+        #                 ])
+        #             ])
+        #         ])
+        #     ]),
+
+        #     dbc.Col([
+
+        #         dbc.Card([
+
+        #             dbc.CardBody([
+
+        #                 html.Div([
+
+        #                             html.Span([
+                                        
+        #                                 dbc.Button(
+        #                                     html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+        #                                                 style={'float':'right'},
+        #                                                 className="p-0 img-fluid"), 
+        #                                         id="open1_bicidia", 
+        #                                         n_clicks=0, 
+        #                                         style={'display':'inline-block',
+        #                                                 'float':'left','padding':'0', 
+        #                                                 'width':'15px','background-color':'transparent',
+        #                                                 'border-color':'transparent','padding-top':'5px'},
+        #                                         className='rounded-circle'
+        #                                 ),  
+        #                             ], id = 'tooltip-target-bicidia'),
+
+        #                             dbc.Tooltip(
+        #                                 'Más información',
+        #                                 target = 'tooltip-target-bicidia'
+        #                             ),
+
+        #                             dbc.Modal([
+
+        #                                 dbc.ModalHeader(html.B('Bicicletas por Día')),
+
+        #                                 dbc.ModalBody([
+        #                                     html.P(
+        #                                         'Promedio de bicicletas por día tomado de la semana anterior (Lunes a Domingo).'
+        #                                     ),
+        #                                     # html.P(
+        #                                     #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+        #                                     # )
+        #                                 ]),
+
+        #                                 dbc.ModalFooter([
+        #                                     dbc.Button(
+        #                                         "Cerrar", 
+        #                                         id="close1_bicidia", 
+        #                                         className="ml-auto btn btn-secondary", 
+        #                                         n_clicks=0
+        #                                     )
+        #                                 ])
+        #                             ],
+        #                             id="modal_bicidia",
+        #                             centered=True,
+        #                             size="lg",
+        #                             is_open=False),
+
+        #                             html.P(
+        #                                 ' Bicicletas por Día', style={'width':'90%','float':'left'}, className='pl-1'
+        #                             )
+        #                 ]),
+
+        #                 html.Div([
+        #                             html.H1(str(int(dias_alfonso['bicycle'].iloc[-5:].mean().round())),
+        #                             style = {'float': 'left'}
+        #                             )#,
+        #                             # html.H6(
+        #                             # '+' + str(int((((dias_alfonso['bicycle'].iloc[-5:].mean() / dias_alfonso['bicycle'].iloc[-10:-5].mean()) - 1) * 100).round())) + '%',
+        #                             # style = {'color': 'green',
+        #                             #         'float': 'left'},
+        #                             # className = 'pt-4 pl-2'
+        #                             # )
+        #                 ])
+        #             ])
+        #         ])
+        #     ]),
+
+        #     dbc.Col([
+
+        #         dbc.Card([
+
+        #             dbc.CardBody([
+
+        #                 html.Div([
+
+        #                             html.Span([
+                                        
+        #                                 dbc.Button(
+        #                                     html.Img(src='data:image/png;base64,{}'.format(encoded_img2), 
+        #                                                 style={'float':'right'},
+        #                                                 className="p-0 img-fluid"), 
+        #                                         id="open1_bicihora", 
+        #                                         n_clicks=0, 
+        #                                         style={'display':'inline-block',
+        #                                                 'float':'left','padding':'0', 
+        #                                                 'width':'15px','background-color':'transparent',
+        #                                                 'border-color':'transparent','padding-top':'5px'},
+        #                                         className='rounded-circle'
+        #                                 ),  
+        #                             ], id = 'tooltip-target-bicihora'),
+
+        #                             dbc.Tooltip(
+        #                                 'Más información',
+        #                                 target = 'tooltip-target-bicihora'
+        #                             ),
+
+        #                             dbc.Modal([
+
+        #                                 dbc.ModalHeader(html.B('Bicicletas por Día')),
+
+        #                                 dbc.ModalBody([
+        #                                     html.P(
+        #                                         'Promedio de bicicletas por hora tomado de la semana anterior (Lunes a Domingo).'
+        #                                     ),
+        #                                     # html.P(
+        #                                     #     'El cambio porcentual se obtiene comparando el promedio de la semana anterior contra el de hace 2 semanas.'
+        #                                     # )
+        #                                 ]),
+
+        #                                 dbc.ModalFooter([
+        #                                     dbc.Button(
+        #                                         "Cerrar", 
+        #                                         id="close1_bicihora", 
+        #                                         className="ml-auto btn btn-secondary", 
+        #                                         n_clicks=0
+        #                                     )
+        #                                 ])
+        #                             ],
+        #                             id="modal_bicihora",
+        #                             centered=True,
+        #                             size="lg",
+        #                             is_open=False),
+
+        #                             html.P(
+        #                                 ' Bicicletas por Hora', style={'width':'90%','float':'left'}, className='pl-1'
+        #                             )
+        #                 ]),
+
+        #                 html.Div([
+        #                             html.H1(str(int(ficha_alfonso['bicycle'].iloc[-95:].mean().round())),
+        #                             style = {'float': 'left'}
+        #                              )#,
+        #                             # html.H6(
+        #                             # '+' + str(int((((ficha_alfonso['bicycle'].iloc[-95:].mean() / ficha_alfonso['bicycle'].iloc[-190:-95].mean()) - 1) * 100).round())) + '%',
+        #                             # style = {'color': 'green',
+        #                             #         'float': 'left'},
+        #                             # className = 'pt-4 pl-2'
+        #                             # )
+        #                 ])
+        #             ])
+        #         ])
+        #     ])
+        # ]),
+
+        # html.Br(),
 
         dbc.Row([
 
@@ -1188,9 +1507,15 @@ def fichatecnica_conteo():
                         )
                     ])
                 ])
-            ]),
+            ])
+        ]),
 
+        html.Br(),
+
+        dbc.Row([
+            
             dbc.Col([
+
                 dbc.Card([
 
                     dbc.CardHeader(
@@ -1202,37 +1527,6 @@ def fichatecnica_conteo():
                         dcc.Graph(
                             id = 'motorizados_diasemana',
                             figure = motorizados_diasemana,
-                            config = {
-                                'modeBarButtonsToRemove':
-                                ['zoom2d', 'lasso2d', 'pan2d',
-                                'zoomIn2d', 'zoomOut2d', 'autoScale2d',
-                                'resetScale2d', 'hoverClosestCartesian',
-                                'hoverCompareCartesian', 'toggleSpikelines',
-                                'select2d', 'toImage'],
-                                'displaylogo': False
-                            }
-                        )
-                    ])
-                ])
-            ])
-        ]),
-
-        html.Br(),
-
-        dbc.Row([
-            dbc.Col([
-
-                dbc.Card([
-
-                    dbc.CardHeader(
-                        'Vehículos Motorizados por Día (Entre Semana)'
-                    ),
-
-                    dbc.CardBody([
-
-                        dcc.Graph(
-                            id = 'motorizados_dia',
-                            figure = motorizados_dia,
                             config = {
                                 'modeBarButtonsToRemove':
                                 ['zoom2d', 'lasso2d', 'pan2d',
@@ -1272,29 +1566,9 @@ def fichatecnica_conteo():
                         )
                     ])
                 ])
-            ])
-        ]),
-
-        html.Br(),
-
-        dbc.Row([
-
-            dbc.Col([
-
-                dbc.Card([
-
-                    dbc.CardHeader(
-                        'Información Adicional'
-                    ),
-
-                    dbc.CardBody([
-                        'La información proviene de los datos reportados entre el 26 de julio y el 19 de septiembre en el cruce de Alfonso Reyes y Las Sendas.'
-                    ])
-                ])
-            ])
+            ]) 
         ])
     ])
-
 
 #----------------------------------------------------------
 
@@ -1470,7 +1744,9 @@ peatones_semana.update_yaxes(title_text = '')
 
 peatones_semana.update_layout(hoverlabel = dict(font_size = 16),
                                 hoverlabel_align = 'right', 
-                                hovermode = 'x unified')
+                                hovermode = 'x unified',
+                                margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                                )
 
 # Gráfica de Conteo por Día de la Semana de Peatones
 peatones_diasemana = px.line(diasemana_alfonso, x = 'dia_semana', y = 'peatones',
@@ -1489,7 +1765,9 @@ peatones_diasemana.update_yaxes(title_text = '')
 
 peatones_diasemana.update_layout(hoverlabel = dict(font_size = 16),
                                  hoverlabel_align = 'right', 
-                                 hovermode = 'x unified')
+                                 hovermode = 'x unified',
+                                 margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                                 )
 
 # Gráfica de Conteo por Día de Peatones
 peatones_dia = px.line(dias_alfonso, x = 'fecha', y = 'peatones',
@@ -1509,7 +1787,9 @@ peatones_dia.update_yaxes(title_text = '')
 
 peatones_dia.update_layout(hoverlabel = dict(font_size = 16),
                             hoverlabel_align = 'right', 
-                            hovermode = 'x unified')
+                            hovermode = 'x unified',
+                            margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                            )
 
 # Gráfica de Conteo por Hora de Peatones
 peatones_hora = px.line(dias_promedio, x = 'hora', y = 'peatones',
@@ -1528,7 +1808,9 @@ peatones_hora.update_yaxes(title_text = '')
 
 peatones_hora.update_layout(hoverlabel = dict(font_size = 16),
                             hoverlabel_align = 'right', 
-                            hovermode = 'x unified')
+                            hovermode = 'x unified',
+                            margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                            )
 
 ## GRÁFICAS VEHÍCULOS MOTORIZADOS
 
@@ -1549,7 +1831,9 @@ motorizados_semana.update_yaxes(title_text = '')
 
 motorizados_semana.update_layout(hoverlabel = dict(font_size = 16),
                                 hoverlabel_align = 'right', 
-                                hovermode = 'x unified')
+                                hovermode = 'x unified',
+                                margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                                )
 
 # Gráfica de Conteo por Día de la Semana de Motorizados
 motorizados_diasemana = px.line(diasemana_alfonso, 
@@ -1569,7 +1853,9 @@ motorizados_diasemana.update_yaxes(title_text = '')
 
 motorizados_diasemana.update_layout(hoverlabel = dict(font_size = 16),
                                     hoverlabel_align = 'right', 
-                                    hovermode = 'x unified')
+                                    hovermode = 'x unified',
+                                    margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                                    )
 
 # Gráfica de Conteo por Día de Motorizados
 motorizados_dia = px.line(dias_alfonso, x = 'fecha', y = 'motorizados',
@@ -1589,7 +1875,9 @@ motorizados_dia.update_yaxes(title_text = '')
 
 motorizados_dia.update_layout(hoverlabel = dict(font_size = 16),
                                 hoverlabel_align = 'right', 
-                                hovermode = 'x unified')
+                                hovermode = 'x unified',
+                                margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                                )
 
 #Gráfica de conteo promedio por hora del día de motorizados es fig9
 motorizados_hora = px.line(dias_promedio, x = 'hora', y = 'motorizados',
@@ -1608,7 +1896,9 @@ motorizados_hora.update_yaxes(title_text = '')
 
 motorizados_hora.update_layout(hoverlabel = dict(font_size = 16),
                                 hoverlabel_align = 'right', 
-                                hovermode = 'x unified')
+                                hovermode = 'x unified',
+                                margin = dict(t = 0, l = 0, r = 0, b = 0, pad = 0)
+                                )
 
 #----------------------------------------------------------
 
