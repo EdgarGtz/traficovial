@@ -48,8 +48,7 @@ server = app.server
 # Connect to app pages
 from apps import home
 from apps.alfonsoreyes import (alfonsoreyes, render_alfonsoreyes, render_conteo,
-	render_opciones, toggle_modal_bici, toggle_modal_peatones, toggle_modal_vel, 
-    toggle_modal_bicisemana, toggle_modal_bicidia, toggle_modal_bicihora)
+	render_opciones, toggle_modal_bici, toggle_modal_peatones, toggle_modal_vel)
 
 
 # App Layout
@@ -153,46 +152,6 @@ def toggle_modal_vel(open1_vel, close1_vel, modal_vel):
     if open1_vel or close1_vel:
         return not modal_vel
     return modal_vel
-
-# MODAL BICIS POR SEMANA
-
-@app.callback(
-    Output("modal_bicisemana", "is_open"),
-    [Input("open1_bicisemana", "n_clicks"), 
-    Input("close1_bicisemana", "n_clicks")],
-    [State("modal_bicisemana", "is_open")],)
-
-def toggle_modal_bicisemana(open1_bicisemana, close1_bicisemana, modal_bicisemana):
-    if open1_bicisemana or close1_bicisemana:
-        return not modal_bicisemana
-    return modal_bicisemana
-
-# MODAL BICIS POR DIA
-
-@app.callback(
-    Output("modal_bicidia", "is_open"),
-    [Input("open1_bicidia", "n_clicks"), 
-    Input("close1_bicidia", "n_clicks")],
-    [State("modal_bicidia", "is_open")],)
-
-def toggle_modal_bicidia(open1_bicidia, close1_bicidia, modal_bicidia):
-    if open1_bicidia or close1_bicidia:
-        return not modal_bicidia
-    return modal_bicidia
-
-# MODAL BICIS POR HORA
-
-@app.callback(
-    Output("modal_bicihora", "is_open"),
-    [Input("open1_bicihora", "n_clicks"), 
-    Input("close1_bicihora", "n_clicks")],
-    [State("modal_bicihora", "is_open")],)
-
-def toggle_modal_bicihora(open1_bicihora, close1_bicihora, modal_bicihora):
-    if open1_bicihora or close1_bicihora:
-        return not modal_bicihora
-    return modal_bicihora
-
 
 #----------------------------------------------------------
 
