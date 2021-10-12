@@ -5,10 +5,8 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import dash_auth
 
-FONT_AWESOME = "https://use.fontawesome.com/releases/v5.10.2/css/all.css"
-
 app = dash.Dash(__name__, title='Centro de Gestión de Movilidad',
-				external_stylesheets = [dbc.themes.BOOTSTRAP, FONT_AWESOME],
+				external_stylesheets = [dbc.themes.BOOTSTRAP],
 				meta_tags=[{'name': 'viewport',
                              'content': 'width=device-width, initial-scale=1.0'},],)
 
